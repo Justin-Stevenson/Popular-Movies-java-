@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.nanodegree.android.stevenson.popularmovies.models.Movie;
 import com.nanodegree.android.stevenson.popularmovies.rest.MoviesService;
@@ -19,10 +21,20 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    private RecyclerView mMoviesGrid;
+    private MoviesGridAdapter mMoviesGridAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mMoviesGrid = (RecyclerView) findViewById(R.id.movies_rv);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+        mMoviesGrid.setLayoutManager(gridLayoutManager);
+
+
 
         MoviesService moviesService = ServiceFactory.getService(MoviesService.class);
 
@@ -34,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     int size = response.body().size();
                     Log.e(TAG, "onResponse: " + size);
+
+                    mMoviesGridAdapter = new MoviesGridAdapter(response.body());
+                    mMoviesGrid.setAdapter(mMoviesGridAdapter);
                 } else {
                     Log.e(TAG, "onResponse: " + response.code() + " " + response.message());
                 }
