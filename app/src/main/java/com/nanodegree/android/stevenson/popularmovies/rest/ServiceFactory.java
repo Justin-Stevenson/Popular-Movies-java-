@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.nanodegree.android.stevenson.popularmovies.models.Movie;
 import com.nanodegree.android.stevenson.popularmovies.rest.helpers.ApiKeyInterceptor;
 import com.nanodegree.android.stevenson.popularmovies.rest.helpers.MoviesDeserializer;
+import com.nanodegree.android.stevenson.popularmovies.rest.helpers.NetworkConnectionInterceptor;
 
 import java.util.List;
 
@@ -20,12 +21,15 @@ public class ServiceFactory {
 
     private static ApiKeyInterceptor apiKeyInterceptor = new ApiKeyInterceptor();
 
+    private static NetworkConnectionInterceptor networkConnectionInterceptor = new NetworkConnectionInterceptor();
+
     private static HttpLoggingInterceptor httpLogger =
             new HttpLoggingInterceptor()
                     .setLevel(HttpLoggingInterceptor.Level.BODY);
 
     private static OkHttpClient.Builder okHttp =
             new OkHttpClient.Builder()
+                    .addInterceptor(networkConnectionInterceptor)
                     .addInterceptor(httpLogger)
                     .addInterceptor(apiKeyInterceptor);
 
