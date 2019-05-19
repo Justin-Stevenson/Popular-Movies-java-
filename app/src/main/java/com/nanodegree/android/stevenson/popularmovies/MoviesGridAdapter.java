@@ -15,17 +15,10 @@ import java.util.List;
 
 public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.MovieViewHolder> {
 
-    private static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185/";
-
     private List<Movie> movies;
 
     public MoviesGridAdapter(List<Movie> movies) {
         this.movies = movies;
-    }
-
-    public void updateMovies(List<Movie> updatedMovies) {
-        movies = updatedMovies;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -59,8 +52,10 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
         void bind(int positionIndex) {
             Movie movie = movies.get(positionIndex);
             Picasso.get()
-                    .load(IMG_BASE_URL + movie.getPoster())
+                    .load(movie.getPoster())
                     .fit()
+                    .placeholder(R.drawable.movie_frame_placeholder)
+                    .error(R.drawable.data_retrieval_error)
                     .into(moviePosterImg);
         }
     }

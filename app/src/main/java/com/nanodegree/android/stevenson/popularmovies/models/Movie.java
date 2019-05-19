@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class Movie {
 
+    private static final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
+
     private String title;
 
     @SerializedName("poster_path")
@@ -27,7 +29,7 @@ public class Movie {
     }
 
     public String getPoster() {
-        return poster;
+        return POSTER_BASE_URL + poster;
     }
 
     public void setPoster(String poster) {

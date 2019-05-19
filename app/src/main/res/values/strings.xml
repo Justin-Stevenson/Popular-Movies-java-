@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">PopularMovies</string>
 
+    <!-- Error image ratio -->
+    <string name="error_image_dimensions">H,16:9</string>
+
     <!-- Network connection error-->
     <string name="no_network_connection_img_description">No network connection</string>
     <string name="no_network_connection_header">No connection...</string>
