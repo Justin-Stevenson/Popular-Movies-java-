@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">PopularMovies</string>
+
+    <!-- Network connection error-->
+    <string name="no_network_connection_img_description">No network connection</string>
+    <string name="no_network_connection_header">No connection...</string>
+    <string name="no_network_connection_message">Oops... You cannot connect to the internet. \nPlease check your connection.</string>
+
+    <!-- Data retrieval error-->
+    <string name="data_retrieval_img_description">Error retrieving data</string>
+    <string name="data_retrieval_header">No movie data...</string>
+    <string name="data_retrieval_message">Oops... There was an error retrieving the movie data.</string>
+
+    <!-- Error button -->
+    <string name="no_network_connection_button">Retry</string>
+
 </resources>

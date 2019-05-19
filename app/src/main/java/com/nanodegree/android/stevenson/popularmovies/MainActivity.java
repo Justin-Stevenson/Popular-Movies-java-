@@ -2,6 +2,11 @@ package com.nanodegree.android.stevenson.popularmovies;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -10,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.nanodegree.android.stevenson.popularmovies.models.Movie;
 import com.nanodegree.android.stevenson.popularmovies.rest.MoviesService;
 import com.nanodegree.android.stevenson.popularmovies.rest.ServiceFactory;
+import com.nanodegree.android.stevenson.popularmovies.rest.helpers.NetworkConnectionException;
 
 import java.util.List;
 
@@ -20,44 +26,137 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private static final String POPULAR_MOVIES = "popular";
+    private static final String TOP_RATED_MOVIES = "top rated";
 
+    private ProgressBar mProgressBar;
+    private ImageView mErrorImg;
+    private TextView mErrorHeading;
+    private TextView mErrorMessage;
+    private Button mErrorButton;
     private RecyclerView mMoviesGrid;
     private MoviesGridAdapter mMoviesGridAdapter;
+    private String currentMovieQuery = POPULAR_MOVIES;  // default to POPULAR on initial load
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mProgressBar = (ProgressBar) findViewById(R.id.movies_pb);
+        mErrorImg = (ImageView) findViewById(R.id.error_iv);
+        mErrorHeading = (TextView) findViewById(R.id.error_heading_tv);
+        mErrorMessage = (TextView) findViewById(R.id.error_message_tv);
+        mErrorButton = (Button) findViewById(R.id.error_btn);
         mMoviesGrid = (RecyclerView) findViewById(R.id.movies_rv);
+
+        mErrorButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                loadMovies();
+            }
+        });
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         mMoviesGrid.setLayoutManager(gridLayoutManager);
 
+        loadMovies();
+    }
 
+    private void loadMovies() {
+        showProgressBar();
 
+        if (currentMovieQuery == POPULAR_MOVIES) {
+            getPopularMovies();
+        } else {
+            getTopRatedMovies();
+        }
+    }
+
+    private void getTopRatedMovies() {
+        currentMovieQuery = TOP_RATED_MOVIES;
         MoviesService moviesService = ServiceFactory.getService(MoviesService.class);
 
         final Call<List<Movie>> request = moviesService.getTopRatedMovies();
 
+        makeHttpRequest(request);
+    }
+
+    private void getPopularMovies() {
+        currentMovieQuery = POPULAR_MOVIES;
+        MoviesService moviesService = ServiceFactory.getService(MoviesService.class);
+
+        final Call<List<Movie>> request = moviesService.getPopularMovies();
+
+        makeHttpRequest(request);
+    }
+
+    private void makeHttpRequest(Call<List<Movie>> request) {
         request.enqueue(new Callback<List<Movie>>() {
             @Override
             public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
                 if (response.isSuccessful()) {
                     int size = response.body().size();
-                    Log.e(TAG, "onResponse: " + size);
+                    Log.d(TAG, "onResponse: retrieved " + size + " movies");
 
                     mMoviesGridAdapter = new MoviesGridAdapter(response.body());
                     mMoviesGrid.setAdapter(mMoviesGridAdapter);
+                    showMovies();
                 } else {
                     Log.e(TAG, "onResponse: " + response.code() + " " + response.message());
+                    showError(Error.DATA_RETRIEVAL);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Movie>> call, Throwable t) {
-                Log.e(TAG, "onFailure: error retrieving movie data", t);
+                if (t instanceof NetworkConnectionException) {
+                    Log.e(TAG, "onFailure: error retrieving movie data due to no network connection", t);
+                    showError(Error.NETWORK_CONNECTION);
+                } else {
+                    Log.e(TAG, "onFailure: error retrieving movie data", t);
+                    showError(Error.DATA_RETRIEVAL);
+                }
             }
         });
+    }
+
+    private void showProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        mErrorImg.setVisibility(View.INVISIBLE);
+        mErrorHeading.setVisibility(View.INVISIBLE);
+        mErrorMessage.setVisibility(View.INVISIBLE);
+        mErrorButton.setVisibility(View.INVISIBLE);
+        mMoviesGrid.setVisibility(View.INVISIBLE);
+    }
+
+    private void showError(Error errorType) {
+        setErrorData(errorType);
+        mErrorImg.setVisibility(View.VISIBLE);
+        mErrorHeading.setVisibility(View.VISIBLE);
+        mErrorMessage.setVisibility(View.VISIBLE);
+        mErrorButton.setVisibility(View.VISIBLE);
+
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mMoviesGrid.setVisibility(View.INVISIBLE);
+    }
+
+    private void showMovies() {
+        mMoviesGrid.setVisibility(View.VISIBLE);
+
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mErrorImg.setVisibility(View.INVISIBLE);
+        mErrorHeading.setVisibility(View.INVISIBLE);
+        mErrorMessage.setVisibility(View.INVISIBLE);
+        mErrorButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void setErrorData(Error errorType) {
+        mErrorImg.setImageResource(errorType.getImage());
+        mErrorImg.setContentDescription(getString(errorType.getImageDescription()));
+        mErrorHeading.setText(errorType.getHeader());
+        mErrorMessage.setText(errorType.getMessage());
     }
 }

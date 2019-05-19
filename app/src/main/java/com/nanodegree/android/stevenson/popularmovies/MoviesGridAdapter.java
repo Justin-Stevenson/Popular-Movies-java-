@@ -23,6 +23,11 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
         this.movies = movies;
     }
 
+    public void updateMovies(List<Movie> updatedMovies) {
+        movies = updatedMovies;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
