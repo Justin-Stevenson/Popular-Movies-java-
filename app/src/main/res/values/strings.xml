@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+    <string name="app_name">Popular Movies</string>
 
     <!-- Error image ratio -->
     <string name="error_image_dimensions">H,16:9</string>
