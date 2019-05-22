@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Popular Movies</string>
 
+    <!-- Details action bar display title-->
+    <string name="details_activity_display_title">Movie Details</string>
+
     <!-- Network connection error-->
     <string name="no_network_connection_img_description">No network connection</string>
     <string name="no_network_connection_header">No connection...</string>

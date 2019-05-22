@@ -3,10 +3,12 @@ package com.nanodegree.android.stevenson.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 import com.nanodegree.android.stevenson.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
@@ -23,7 +25,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private static final String MOVIE_POSTER_SUFFIX = " movie poster";
     private static final String USER_RATING_SUFFIX = " / 10";
     private static final String INPUT_RELEASE_DATE_FORMAT = "yyyy-MM-dd";
-    private static final String OUTPUT_RELEASE_DATE_FORMAT = "MMMM dd, yyyy";
+    private static final String OUTPUT_RELEASE_DATE_FORMAT = "MMMM d, yyyy";
 
     private ImageView mMoviePosterImg;
     private TextView mMovieTitle;
@@ -35,6 +37,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mMoviePosterImg = (ImageView) findViewById(R.id.movie_poster_iv);
         mMovieTitle = (TextView) findViewById(R.id.movie_title_tv);
@@ -57,6 +61,20 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mReleaseDate.setText(formatReleaseDate(movie.getReleaseDate()));
         mUserRating.setText(movie.getUserRating() + USER_RATING_SUFFIX);
         mPlotSynopsis.setText(movie.getSynopsis());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int selectedId = item.getItemId();
+
+        switch (selectedId) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private String formatReleaseDate(String releaseDate) {
