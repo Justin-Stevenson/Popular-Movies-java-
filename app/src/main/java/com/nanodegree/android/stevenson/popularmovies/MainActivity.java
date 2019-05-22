@@ -1,5 +1,6 @@
 package com.nanodegree.android.stevenson.popularmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +24,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements MoviesGridAdapter.MovieClickListener {
 
     private static final String TAG = "MainActivity";
     private static final String POPULAR_MOVIES = "popular";
@@ -64,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
         loadMovies();
     }
 
+    @Override
+    public void onMovieClick(Movie clickedMovie) {
+        Intent intent = new Intent(this, MovieDetailsActivity.class);
+        intent.putExtra(MovieDetailsActivity.MOVIE_KEY, clickedMovie);
+
+        startActivity(intent);
+    }
+
     private void loadMovies() {
         showProgressBar();
 
@@ -100,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     int size = response.body().size();
                     Log.d(TAG, "onResponse: retrieved " + size + " movies");
 
-                    mMoviesGridAdapter = new MoviesGridAdapter(response.body());
+                    mMoviesGridAdapter = new MoviesGridAdapter(response.body(), MainActivity.this);
                     mMoviesGrid.setAdapter(mMoviesGridAdapter);
                     showMovies();
                 } else {

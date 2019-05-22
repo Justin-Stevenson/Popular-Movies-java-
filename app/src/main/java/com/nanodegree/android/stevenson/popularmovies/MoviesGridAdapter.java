@@ -15,10 +15,16 @@ import java.util.List;
 
 public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.MovieViewHolder> {
 
-    private List<Movie> movies;
+    public interface MovieClickListener {
+        void onMovieClick(Movie clickedMovie);
+    }
 
-    public MoviesGridAdapter(List<Movie> movies) {
-        this.movies = movies;
+    private List<Movie> mMovies;
+    final private MovieClickListener mMovieClickListener;
+
+    public MoviesGridAdapter(List<Movie> movies, MovieClickListener listener) {
+        this.mMovies = movies;
+        this.mMovieClickListener = listener;
     }
 
     @NonNull
@@ -37,26 +43,35 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
 
     @Override
     public int getItemCount() {
-        return (movies != null) ? movies.size() : 0;
+        return (mMovies != null) ? mMovies.size() : 0;
     }
 
-    class MovieViewHolder extends RecyclerView.ViewHolder {
+    class MovieViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
-        ImageView moviePosterImg;
+        ImageView mMoviePosterImg;
 
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
-            moviePosterImg = (ImageView) itemView.findViewById(R.id.movie_poster_iv);
+            mMoviePosterImg = (ImageView) itemView.findViewById(R.id.movie_poster_iv);
+            itemView.setOnClickListener(this);
         }
 
         void bind(int positionIndex) {
-            Movie movie = movies.get(positionIndex);
+            Movie movie = mMovies.get(positionIndex);
             Picasso.get()
                     .load(movie.getPoster())
                     .fit()
                     .placeholder(R.drawable.movie_frame_placeholder)
                     .error(R.drawable.data_retrieval_error)
-                    .into(moviePosterImg);
+                    .into(mMoviePosterImg);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition = getAdapterPosition();
+            Movie movie = mMovies.get(clickedPosition);
+            mMovieClickListener.onMovieClick(movie);
         }
     }
 }
