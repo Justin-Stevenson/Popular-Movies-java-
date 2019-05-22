@@ -1,8 +1,11 @@
 package com.nanodegree.android.stevenson.popularmovies.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Movie {
+public class Movie implements Parcelable {
 
     private static final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
 
@@ -19,6 +22,26 @@ public class Movie {
 
     @SerializedName("release_date")
     private String releaseDate;
+
+    protected Movie(Parcel in) {
+        title = in.readString();
+        poster = in.readString();
+        synopsis = in.readString();
+        userRating = in.readString();
+        releaseDate = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -58,5 +81,19 @@ public class Movie {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(poster);
+        dest.writeString(synopsis);
+        dest.writeString(userRating);
+        dest.writeString(releaseDate);
     }
 }
