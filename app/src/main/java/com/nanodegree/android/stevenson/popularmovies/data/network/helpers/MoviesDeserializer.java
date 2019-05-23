@@ -1,4 +1,4 @@
-package com.nanodegree.android.stevenson.popularmovies.rest.helpers;
+package com.nanodegree.android.stevenson.popularmovies.data.network.helpers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;

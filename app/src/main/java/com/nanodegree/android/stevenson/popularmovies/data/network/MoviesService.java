@@ -1,4 +1,4 @@
-package com.nanodegree.android.stevenson.popularmovies.rest;
+package com.nanodegree.android.stevenson.popularmovies.data.network;
 
 import com.nanodegree.android.stevenson.popularmovies.models.Movie;
 

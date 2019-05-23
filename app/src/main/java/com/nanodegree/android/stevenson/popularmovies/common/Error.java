@@ -1,4 +1,6 @@
-package com.nanodegree.android.stevenson.popularmovies;
+package com.nanodegree.android.stevenson.popularmovies.common;
+
+import com.nanodegree.android.stevenson.popularmovies.R;
 
 public enum Error {
 
@@ -8,10 +10,10 @@ public enum Error {
     DATA_RETRIEVAL(R.drawable.data_retrieval_error, R.string.data_retrieval_img_description,
             R.string.data_retrieval_header, R.string.data_retrieval_message);
 
-    private int image;
-    private int imageDescription;
-    private int header;
-    private int message;
+    private final int image;
+    private final int imageDescription;
+    private final int header;
+    private final int message;
 
     Error(int image, int imageDescription, int header, int message) {
         this.image = image;

@@ -29,7 +29,6 @@
     <dimen name="movie_poster_iv_width">0dp</dimen>
     <dimen name="movie_poster_iv_height">0dp</dimen>
     <dimen name="movie_poster_margin">2dp</dimen>
-    <item name="movie_poster_iv_dimension_ratio" format="string" type="dimen">2:3</item>
 
     <!-- Movie Details image -->
     <dimen name="details_movie_poster_iv_width">0dp</dimen>

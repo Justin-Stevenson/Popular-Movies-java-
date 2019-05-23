@@ -15,10 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nanodegree.android.stevenson.popularmovies.common.Error;
+import com.nanodegree.android.stevenson.popularmovies.common.SortOrder;
+import com.nanodegree.android.stevenson.popularmovies.data.MoviesRepository;
+import com.nanodegree.android.stevenson.popularmovies.data.network.helpers.NetworkConnectionException;
 import com.nanodegree.android.stevenson.popularmovies.models.Movie;
-import com.nanodegree.android.stevenson.popularmovies.rest.MoviesService;
-import com.nanodegree.android.stevenson.popularmovies.rest.ServiceFactory;
-import com.nanodegree.android.stevenson.popularmovies.rest.helpers.NetworkConnectionException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +32,8 @@ public class MainActivity extends AppCompatActivity
         implements MoviesGridAdapter.MovieClickListener {
 
     private static final String TAG = "MainActivity";
-    private static final String POPULAR_MOVIES = "popular";
-    private static final String TOP_RATED_MOVIES = "top rated";
     private static final String MOVIES_KEY = "movies";
-    private static final String CURRENT_QUERY_KEY = "current_query";
+    private static final String CURRENT_SORT_ORDER_KEY = "sort_order";
 
     private ProgressBar mProgressBar;
     private ImageView mErrorImg;
@@ -42,21 +41,21 @@ public class MainActivity extends AppCompatActivity
     private TextView mErrorMessage;
     private Button mErrorButton;
     private RecyclerView mMoviesGrid;
-    private MoviesGridAdapter mMoviesGridAdapter;
-    private String mCurrentMovieQuery = POPULAR_MOVIES;  // default to POPULAR on initial load
+    private SortOrder mCurrentSortOrder;
     private List<Movie> mMovies;
+    private MoviesRepository mMoviesRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.movies_pb);
-        mErrorImg = (ImageView) findViewById(R.id.error_iv);
-        mErrorHeading = (TextView) findViewById(R.id.error_heading_tv);
-        mErrorMessage = (TextView) findViewById(R.id.error_message_tv);
-        mErrorButton = (Button) findViewById(R.id.error_btn);
-        mMoviesGrid = (RecyclerView) findViewById(R.id.movies_rv);
+        mProgressBar = findViewById(R.id.movies_pb);
+        mErrorImg = findViewById(R.id.error_iv);
+        mErrorHeading = findViewById(R.id.error_heading_tv);
+        mErrorMessage = findViewById(R.id.error_message_tv);
+        mErrorButton = findViewById(R.id.error_btn);
+        mMoviesGrid = findViewById(R.id.movies_rv);
 
         mErrorButton.setOnClickListener(new View.OnClickListener() {
 
@@ -69,11 +68,14 @@ public class MainActivity extends AppCompatActivity
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         mMoviesGrid.setLayoutManager(gridLayoutManager);
 
+        mMoviesRepository = new MoviesRepository();
+
         if (hasMoviesSaved(savedInstanceState)) {
-            mCurrentMovieQuery = savedInstanceState.getString(CURRENT_QUERY_KEY);
-            List<Movie> movies = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
-            loadMovies(movies);
+            mCurrentSortOrder = (SortOrder) savedInstanceState.getSerializable(CURRENT_SORT_ORDER_KEY);
+            mMovies = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
+            loadMovies(mMovies);
         } else {
+            mCurrentSortOrder = SortOrder.POPULAR;
             loadMovies();
         }
     }
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
         ArrayList<Movie> movies = new ArrayList<>(mMovies);
         outState.putParcelableArrayList(MOVIES_KEY,movies);
-        outState.putString(CURRENT_QUERY_KEY, mCurrentMovieQuery);
+        outState.putSerializable(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
     }
 
     @Override
@@ -99,14 +101,16 @@ public class MainActivity extends AppCompatActivity
 
         switch (selectedItemId) {
             case R.id.action_popular:
-                if (mCurrentMovieQuery != POPULAR_MOVIES) {
-                    getPopularMovies();
+                if (SortOrder.POPULAR != mCurrentSortOrder) {
+                    mCurrentSortOrder = SortOrder.POPULAR;
+                    loadMovies();
                 }
                 return true;
 
             case R.id.action_top_rated:
-                if (mCurrentMovieQuery != TOP_RATED_MOVIES) {
-                    getTopRatedMovies();
+                if (SortOrder.TOP_RATED != mCurrentSortOrder) {
+                    mCurrentSortOrder = SortOrder.TOP_RATED;
+                    loadMovies();
                 }
                 return true;
         }
@@ -123,49 +127,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadMovies(List<Movie> movies) {
-        mMovies = movies;
-        mMoviesGridAdapter = new MoviesGridAdapter(mMovies, MainActivity.this);
-        mMoviesGrid.setAdapter(mMoviesGridAdapter);
+        MoviesGridAdapter moviesGridAdapter = new MoviesGridAdapter(movies, MainActivity.this);
+        mMoviesGrid.setAdapter(moviesGridAdapter);
         showMovies();
     }
 
     private void loadMovies() {
         showProgressBar();
 
-        if (mCurrentMovieQuery == POPULAR_MOVIES) {
-            getPopularMovies();
-        } else {
-            getTopRatedMovies();
-        }
+        mMoviesRepository.getMovies(mCurrentSortOrder, getMoviesCallback());
     }
 
-    private void getTopRatedMovies() {
-        mCurrentMovieQuery = TOP_RATED_MOVIES;
-        MoviesService moviesService = ServiceFactory.getService(MoviesService.class);
-
-        final Call<List<Movie>> request = moviesService.getTopRatedMovies();
-
-        makeHttpRequest(request);
-    }
-
-    private void getPopularMovies() {
-        mCurrentMovieQuery = POPULAR_MOVIES;
-        MoviesService moviesService = ServiceFactory.getService(MoviesService.class);
-
-        final Call<List<Movie>> request = moviesService.getPopularMovies();
-
-        makeHttpRequest(request);
-    }
-
-    private void makeHttpRequest(Call<List<Movie>> request) {
-        request.enqueue(new Callback<List<Movie>>() {
+    private Callback<List<Movie>> getMoviesCallback() {
+        return new Callback<List<Movie>>() {
             @Override
             public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
                 if (response.isSuccessful()) {
-                    int size = response.body().size();
-                    Log.d(TAG, "onResponse: retrieved " + size + " movies");
-
-                    loadMovies(response.body());
+                    mMovies = response.body();
+                    loadMovies(mMovies);
                 } else {
                     Log.e(TAG, "onResponse: " + response.code() + " " + response.message());
                     showError(Error.DATA_RETRIEVAL);
@@ -182,7 +161,7 @@ public class MainActivity extends AppCompatActivity
                     showError(Error.DATA_RETRIEVAL);
                 }
             }
-        });
+        };
     }
 
     private void showProgressBar() {

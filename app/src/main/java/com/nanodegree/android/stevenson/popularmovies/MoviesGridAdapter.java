@@ -19,7 +19,7 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
         void onMovieClick(Movie clickedMovie);
     }
 
-    private List<Movie> mMovies;
+    private final List<Movie> mMovies;
     final private MovieClickListener mMovieClickListener;
 
     public MoviesGridAdapter(List<Movie> movies, MovieClickListener listener) {
@@ -49,11 +49,11 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
     class MovieViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        ImageView mMoviePosterImg;
+        final ImageView mMoviePosterImg;
 
-        public MovieViewHolder(@NonNull View itemView) {
+        MovieViewHolder(@NonNull View itemView) {
             super(itemView);
-            mMoviePosterImg = (ImageView) itemView.findViewById(R.id.movie_poster_iv);
+            mMoviePosterImg = itemView.findViewById(R.id.movie_poster_iv);
             itemView.setOnClickListener(this);
         }
 

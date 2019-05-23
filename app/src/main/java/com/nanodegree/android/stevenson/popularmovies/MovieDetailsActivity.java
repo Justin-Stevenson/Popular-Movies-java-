@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 
@@ -38,17 +39,37 @@ public class MovieDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
 
-        mMoviePosterImg = (ImageView) findViewById(R.id.movie_poster_iv);
-        mMovieTitle = (TextView) findViewById(R.id.movie_title_tv);
-        mReleaseDate = (TextView) findViewById(R.id.release_date_tv);
-        mUserRating = (TextView) findViewById(R.id.user_rating_tv);
-        mPlotSynopsis = (TextView) findViewById(R.id.plot_synopsis_tv);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        mMoviePosterImg = findViewById(R.id.movie_poster_iv);
+        mMovieTitle = findViewById(R.id.movie_title_tv);
+        mReleaseDate = findViewById(R.id.release_date_tv);
+        mUserRating = findViewById(R.id.user_rating_tv);
+        mPlotSynopsis = findViewById(R.id.plot_synopsis_tv);
 
         Intent intent = getIntent();
         Movie movie = intent.getParcelableExtra(MOVIE_KEY);
 
+        displayMovieDetails(movie);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int selectedId = item.getItemId();
+
+        if (selectedId == android.R.id.home) {
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void displayMovieDetails(Movie movie) {
         Picasso.get()
                 .load(movie.getPoster())
                 .fit()
@@ -61,20 +82,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mReleaseDate.setText(formatReleaseDate(movie.getReleaseDate()));
         mUserRating.setText(movie.getUserRating() + USER_RATING_SUFFIX);
         mPlotSynopsis.setText(movie.getSynopsis());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int selectedId = item.getItemId();
-
-        switch (selectedId) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private String formatReleaseDate(String releaseDate) {

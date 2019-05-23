@@ -23,7 +23,7 @@ public class Movie implements Parcelable {
     @SerializedName("release_date")
     private String releaseDate;
 
-    protected Movie(Parcel in) {
+    private Movie(Parcel in) {
         title = in.readString();
         poster = in.readString();
         synopsis = in.readString();
