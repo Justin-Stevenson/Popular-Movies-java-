@@ -3,6 +3,8 @@ package com.nanodegree.android.stevenson.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -82,6 +84,34 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Movie> movies = new ArrayList<>(mMovies);
         outState.putParcelableArrayList(MOVIES_KEY,movies);
         outState.putString(CURRENT_QUERY_KEY, mCurrentMovieQuery);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.movies_options, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int selectedItemId = item.getItemId();
+
+        switch (selectedItemId) {
+            case R.id.action_popular:
+                if (mCurrentMovieQuery != POPULAR_MOVIES) {
+                    getPopularMovies();
+                }
+                return true;
+
+            case R.id.action_top_rated:
+                if (mCurrentMovieQuery != TOP_RATED_MOVIES) {
+                    getTopRatedMovies();
+                }
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

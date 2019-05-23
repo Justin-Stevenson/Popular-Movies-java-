@@ -20,6 +20,10 @@
     <!-- Movie poster image -->
     <string name="default_movie_poster_content_description">Movie poster image</string>
 
+    <!-- Movies option menu-->
+    <string name="action_popular">Popular</string>
+    <string name="action_top_rated">Top Rated</string>
+
     <!-- Movie Details labels -->
     <string name="details_release_date">Release Date</string>
     <string name="details_user_rating">User Rating</string>
