@@ -18,6 +18,7 @@ import com.nanodegree.android.stevenson.popularmovies.rest.MoviesService;
 import com.nanodegree.android.stevenson.popularmovies.rest.ServiceFactory;
 import com.nanodegree.android.stevenson.popularmovies.rest.helpers.NetworkConnectionException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     private static final String POPULAR_MOVIES = "popular";
     private static final String TOP_RATED_MOVIES = "top rated";
+    private static final String MOVIES_KEY = "movies";
+    private static final String CURRENT_QUERY_KEY = "current_query";
 
     private ProgressBar mProgressBar;
     private ImageView mErrorImg;
@@ -38,7 +41,8 @@ public class MainActivity extends AppCompatActivity
     private Button mErrorButton;
     private RecyclerView mMoviesGrid;
     private MoviesGridAdapter mMoviesGridAdapter;
-    private String currentMovieQuery = POPULAR_MOVIES;  // default to POPULAR on initial load
+    private String mCurrentMovieQuery = POPULAR_MOVIES;  // default to POPULAR on initial load
+    private List<Movie> mMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,21 @@ public class MainActivity extends AppCompatActivity
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         mMoviesGrid.setLayoutManager(gridLayoutManager);
 
-        loadMovies();
+        if (hasMoviesSaved(savedInstanceState)) {
+            mCurrentMovieQuery = savedInstanceState.getString(CURRENT_QUERY_KEY);
+            List<Movie> movies = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
+            loadMovies(movies);
+        } else {
+            loadMovies();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        ArrayList<Movie> movies = new ArrayList<>(mMovies);
+        outState.putParcelableArrayList(MOVIES_KEY,movies);
+        outState.putString(CURRENT_QUERY_KEY, mCurrentMovieQuery);
     }
 
     @Override
@@ -74,10 +92,17 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    private void loadMovies(List<Movie> movies) {
+        mMovies = movies;
+        mMoviesGridAdapter = new MoviesGridAdapter(mMovies, MainActivity.this);
+        mMoviesGrid.setAdapter(mMoviesGridAdapter);
+        showMovies();
+    }
+
     private void loadMovies() {
         showProgressBar();
 
-        if (currentMovieQuery == POPULAR_MOVIES) {
+        if (mCurrentMovieQuery == POPULAR_MOVIES) {
             getPopularMovies();
         } else {
             getTopRatedMovies();
@@ -85,7 +110,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getTopRatedMovies() {
-        currentMovieQuery = TOP_RATED_MOVIES;
+        mCurrentMovieQuery = TOP_RATED_MOVIES;
         MoviesService moviesService = ServiceFactory.getService(MoviesService.class);
 
         final Call<List<Movie>> request = moviesService.getTopRatedMovies();
@@ -94,7 +119,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getPopularMovies() {
-        currentMovieQuery = POPULAR_MOVIES;
+        mCurrentMovieQuery = POPULAR_MOVIES;
         MoviesService moviesService = ServiceFactory.getService(MoviesService.class);
 
         final Call<List<Movie>> request = moviesService.getPopularMovies();
@@ -110,9 +135,7 @@ public class MainActivity extends AppCompatActivity
                     int size = response.body().size();
                     Log.d(TAG, "onResponse: retrieved " + size + " movies");
 
-                    mMoviesGridAdapter = new MoviesGridAdapter(response.body(), MainActivity.this);
-                    mMoviesGrid.setAdapter(mMoviesGridAdapter);
-                    showMovies();
+                    loadMovies(response.body());
                 } else {
                     Log.e(TAG, "onResponse: " + response.code() + " " + response.message());
                     showError(Error.DATA_RETRIEVAL);
@@ -168,5 +191,9 @@ public class MainActivity extends AppCompatActivity
         mErrorImg.setContentDescription(getString(errorType.getImageDescription()));
         mErrorHeading.setText(errorType.getHeader());
         mErrorMessage.setText(errorType.getMessage());
+    }
+
+    private boolean hasMoviesSaved(Bundle savedInstanceState) {
+        return savedInstanceState != null && savedInstanceState.getParcelableArrayList(MOVIES_KEY) != null;
     }
 }
