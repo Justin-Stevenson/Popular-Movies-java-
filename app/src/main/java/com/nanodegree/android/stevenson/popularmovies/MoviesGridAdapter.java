@@ -1,0 +1,79 @@
+package com.nanodegree.android.stevenson.popularmovies;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.nanodegree.android.stevenson.popularmovies.models.Movie;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.MovieViewHolder> {
+
+    public interface MovieClickListener {
+        void onMovieClick(Movie clickedMovie);
+    }
+
+    private final List<Movie> mMovies;
+    final private MovieClickListener mMovieClickListener;
+
+    public MoviesGridAdapter(List<Movie> movies, MovieClickListener listener) {
+        this.mMovies = movies;
+        this.mMovieClickListener = listener;
+    }
+
+    @NonNull
+    @Override
+    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.movie_grid_item, parent, false);
+
+        return new MovieViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
+        holder.bind(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return (mMovies != null) ? mMovies.size() : 0;
+    }
+
+    class MovieViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
+        final ImageView mMoviePosterImg;
+
+        MovieViewHolder(@NonNull View itemView) {
+            super(itemView);
+            mMoviePosterImg = itemView.findViewById(R.id.movie_poster_iv);
+            itemView.setOnClickListener(this);
+        }
+
+        void bind(int positionIndex) {
+            Movie movie = mMovies.get(positionIndex);
+            Picasso.get()
+                    .load(movie.getPoster())
+                    .fit()
+                    .placeholder(R.drawable.movie_frame_placeholder)
+                    .error(R.drawable.data_retrieval_error)
+                    .into(mMoviePosterImg);
+
+            mMoviePosterImg.setContentDescription(movie.getTitle());
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition = getAdapterPosition();
+            Movie movie = mMovies.get(clickedPosition);
+            mMovieClickListener.onMovieClick(movie);
+        }
+    }
+}

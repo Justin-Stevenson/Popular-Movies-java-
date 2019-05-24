@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Movies progress bar-->
+    <dimen name="progress_bar_width">100dp</dimen>
+    <dimen name="progress_bar_height">100dp</dimen>
+
+    <!-- Movies Guideline -->
+    <item name="main_horizontal_guideline_constraint_percent" format="float" type="dimen">0.20</item>
+
+    <!-- Movies errors -->
+    <dimen name="error_iv_width">0dp</dimen>
+    <dimen name="error_iv_height">0dp</dimen>
+    <item name="error_iv_dimension_ratio" format="string" type="dimen">16:9</item>
+    <dimen name="error_heading_margin">8dp</dimen>
+    <dimen name="error_heading_text_size">20sp</dimen>
+    <dimen name="error_message_tv_width">0dp</dimen>
+    <dimen name="error_message_tv_top_margin">16dp</dimen>
+    <dimen name="error_message_tv_side_margin">8dp</dimen>
+    <dimen name="error_message_tv_text_size">15sp</dimen>
+    <dimen name="error_btn_width">0dp</dimen>
+    <dimen name="error_btn_margin">8dp</dimen>
+    <item name="error_btn_constraint_width_percent" format="float" type="dimen">0.66</item>
+
+    <!-- Movies -->
+    <dimen name="movies_rv_height">0dp</dimen>
+
+    <!-- Movie Grid Item -->
+    <dimen name="movie_poster_iv_width">0dp</dimen>
+    <dimen name="movie_poster_iv_height">0dp</dimen>
+    <dimen name="movie_poster_margin">2dp</dimen>
+
+    <!-- Movie Details image -->
+    <dimen name="details_movie_poster_iv_width">0dp</dimen>
+    <dimen name="details_movie_poster_iv_height">0dp</dimen>
+    <dimen name="details_movie_poster_iv_margin">8dp</dimen>
+    <item name="details_movie_poster_iv_dimension_ratio" format="string" type="dimen">2:3</item>
+
+    <!-- Movie Details guideline -->
+    <dimen name="details_vertical_guideline_height">0dp</dimen>
+    <item name="details_vertical_guideline_constraint_percent" format="float" type="dimen">0.6</item>
+
+    <!-- Movie Details title -->
+    <dimen name="details_movie_title_tv_width">0dp</dimen>
+    <dimen name="details_movie_title_tv_text_size">25sp</dimen>
+    <dimen name="details_movie_title_tv_margin">8dp</dimen>
+
+    <!-- Movie Details labels -->
+    <dimen name="details_label_width">0dp</dimen>
+    <dimen name="details_label_margin_top">32dp</dimen>
+    <dimen name="details_label_margin_side">16dp</dimen>
+    <dimen name="details_label_text_size">20sp</dimen>
+
+    <!-- Movie Details values -->
+    <dimen name="details_value_width">0dp</dimen>
+    <dimen name="details_value_margin_side">16dp</dimen>
+    <dimen name="details_value_text_size">15sp</dimen>
+
+</resources>
