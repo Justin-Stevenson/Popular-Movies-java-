@@ -4,21 +4,25 @@
     <!-- Details action bar display title-->
     <string name="details_activity_display_title">Movie Details</string>
 
+    <!-- Error image -->
+    <string name="error_image_content_description">Error image</string>
+
     <!-- Network connection error-->
     <string name="no_network_connection_img_description">No network connection</string>
-    <string name="no_network_connection_header">No connection...</string>
-    <string name="no_network_connection_message">Oops... You cannot connect to the internet. \nPlease check your connection.</string>
+    <string name="no_network_connection_header">No connection…</string>
+    <string name="no_network_connection_message">Oops… You cannot connect to the internet. \nPlease check your connection.</string>
 
     <!-- Data retrieval error-->
     <string name="data_retrieval_img_description">Error retrieving data</string>
-    <string name="data_retrieval_header">No movie data...</string>
-    <string name="data_retrieval_message">Oops... There was an error retrieving the movie data.</string>
+    <string name="data_retrieval_header">No movie data…</string>
+    <string name="data_retrieval_message">Oops… There was an error retrieving the movie data.</string>
 
     <!-- Error button -->
     <string name="no_network_connection_button">Retry</string>
 
     <!-- Movie poster image -->
     <string name="default_movie_poster_content_description">Movie poster image</string>
+    <string name="movie_poster_content_description">%1$s movie poster</string>
 
     <!-- Movies option menu-->
     <string name="action_popular">Popular</string>
@@ -28,4 +32,8 @@
     <string name="details_release_date">Release Date</string>
     <string name="details_user_rating">User Rating</string>
     <string name="details_plot_synopsis">Plot Synopsis</string>
+
+    <!-- Movie Details values -->
+    <string name="user_rating_text">%1$s / 10</string>
+
 </resources>

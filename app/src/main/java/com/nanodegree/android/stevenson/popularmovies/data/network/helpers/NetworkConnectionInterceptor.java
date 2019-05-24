@@ -1,5 +1,7 @@
 package com.nanodegree.android.stevenson.popularmovies.data.network.helpers;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -11,8 +13,9 @@ import okhttp3.Response;
 
 public class NetworkConnectionInterceptor implements Interceptor {
 
+    @SuppressWarnings("NullableProblems")
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         if (!hasNetworkConnection()) {
             throw new NetworkConnectionException();
         }

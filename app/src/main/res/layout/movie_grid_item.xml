@@ -14,6 +14,7 @@
         android:layout_marginStart="@dimen/movie_poster_margin"
         android:layout_marginRight="@dimen/movie_poster_margin"
         android:layout_marginEnd="@dimen/movie_poster_margin"
+        android:contentDescription="@string/default_movie_poster_content_description"
         app:layout_constraintDimensionRatio="@dimen/details_movie_poster_iv_dimension_ratio"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

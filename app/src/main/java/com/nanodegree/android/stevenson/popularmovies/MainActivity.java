@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity
     private Callback<List<Movie>> getMoviesCallback() {
         return new Callback<List<Movie>>() {
             @Override
-            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
+            public void onResponse(@NonNull Call<List<Movie>> call, @NonNull Response<List<Movie>> response) {
                 if (response.isSuccessful()) {
                     mMovies = response.body();
                     loadMovies(mMovies);
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<List<Movie>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Movie>> call, @NonNull Throwable t) {
                 if (t instanceof NetworkConnectionException) {
                     Log.e(TAG, "onFailure: error retrieving movie data due to no network connection", t);
                     showError(Error.NETWORK_CONNECTION);

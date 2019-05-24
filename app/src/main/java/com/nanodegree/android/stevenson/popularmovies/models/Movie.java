@@ -9,19 +9,19 @@ public class Movie implements Parcelable {
 
     private static final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
 
-    private String title;
+    private final String title;
 
     @SerializedName("poster_path")
-    private String poster;
+    private final String poster;
 
     @SerializedName("overview")
-    private String synopsis;
+    private final String synopsis;
 
     @SerializedName("vote_average")
-    private String userRating;
+    private final String userRating;
 
     @SerializedName("release_date")
-    private String releaseDate;
+    private final String releaseDate;
 
     private Movie(Parcel in) {
         title = in.readString();
@@ -47,40 +47,20 @@ public class Movie implements Parcelable {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getPoster() {
         return POSTER_BASE_URL + poster;
-    }
-
-    public void setPoster(String poster) {
-        this.poster = poster;
     }
 
     public String getSynopsis() {
         return synopsis;
     }
 
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
-    }
-
     public String getUserRating() {
         return userRating;
     }
 
-    public void setUserRating(String userRating) {
-        this.userRating = userRating;
-    }
-
     public String getReleaseDate() {
         return releaseDate;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
     }
 
     @Override

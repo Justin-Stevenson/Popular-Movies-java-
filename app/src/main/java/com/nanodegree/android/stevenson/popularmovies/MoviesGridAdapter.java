@@ -65,6 +65,8 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
                     .placeholder(R.drawable.movie_frame_placeholder)
                     .error(R.drawable.data_retrieval_error)
                     .into(mMoviePosterImg);
+
+            mMoviePosterImg.setContentDescription(movie.getTitle());
         }
 
         @Override

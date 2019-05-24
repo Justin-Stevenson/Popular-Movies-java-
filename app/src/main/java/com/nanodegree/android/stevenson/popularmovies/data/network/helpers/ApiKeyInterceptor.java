@@ -1,5 +1,7 @@
 package com.nanodegree.android.stevenson.popularmovies.data.network.helpers;
 
+import androidx.annotation.NonNull;
+
 import com.nanodegree.android.stevenson.popularmovies.BuildConfig;
 
 import java.io.IOException;
@@ -13,8 +15,9 @@ public class ApiKeyInterceptor implements Interceptor {
 
     private static final String API_KEY_PARAM_KEY = "api_key";
 
+    @SuppressWarnings("NullableProblems")
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
         HttpUrl url = request.url();
 
