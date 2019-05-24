@@ -58,13 +58,7 @@ public class MainActivity extends AppCompatActivity
         mErrorButton = findViewById(R.id.error_btn);
         mMoviesGrid = findViewById(R.id.movies_rv);
 
-        mErrorButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                loadMovies();
-            }
-        });
+        mErrorButton.setOnClickListener(v -> loadMovies());
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         mMoviesGrid.setLayoutManager(gridLayoutManager);
