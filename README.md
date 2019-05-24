@@ -3,6 +3,11 @@ This app was created for the [Android Developer Nanodegree](https://www.udacity.
 
 It is currently under development. Stay tuned for more to come.
 
+## Stage 1
+* Display popular or top rated movies posters in grid
+* Settings to switch between popular and top rated movies sort orders
+* Clicking movie poster displays movie details
+
 ## How to use
 This application uses data from [The Movie Database API](https://www.themoviedb.org/documentation/api). 
 In order to use it, you must provide your own API key. Once you get the API key, you will need to put
@@ -19,6 +24,12 @@ Inside this folder, there should be a *gradle.properties* file. If not, you shou
 `the_movie_db_v3_api_key="api key goes here"`
 
 ## Acknowledgements
-* Retrofit
+* okhttp
 * Picasso
-* https://materialdesignicons.com/
+* Retrofit
+* The Movie DB
+
+## Attribution
+All movie data is provided by **The Movie DB**
+
+<img src="readme-assets/tmdb.png" width=125 height=49>
