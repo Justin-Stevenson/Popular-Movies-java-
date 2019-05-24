@@ -11,7 +11,6 @@ import com.nanodegree.android.stevenson.popularmovies.models.Movie;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -23,14 +22,9 @@ public class ServiceFactory {
 
     private static final NetworkConnectionInterceptor networkConnectionInterceptor = new NetworkConnectionInterceptor();
 
-    private static final HttpLoggingInterceptor httpLogger =
-            new HttpLoggingInterceptor()
-                    .setLevel(HttpLoggingInterceptor.Level.BODY);
-
     private static final OkHttpClient.Builder okHttp =
             new OkHttpClient.Builder()
                     .addInterceptor(networkConnectionInterceptor)
-                    .addInterceptor(httpLogger)
                     .addInterceptor(apiKeyInterceptor);
 
     private static final Gson gson =
