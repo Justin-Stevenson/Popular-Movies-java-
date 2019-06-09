@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity
         mMoviesRepository = new MoviesRepository();
 
         if (hasMoviesSaved(savedInstanceState)) {
-            mCurrentSortOrder = (SortOrder) savedInstanceState.getSerializable(CURRENT_SORT_ORDER_KEY);
+            mCurrentSortOrder =
+                    (SortOrder) savedInstanceState.getSerializable(CURRENT_SORT_ORDER_KEY);
             mMovies = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
             loadMovies(mMovies);
         } else {
