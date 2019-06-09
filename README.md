@@ -24,10 +24,11 @@ Inside this folder, there should be a *gradle.properties* file. If not, you shou
 `the_movie_db_v3_api_key="api key goes here"`
 
 ## Acknowledgements
-* okhttp
-* Picasso
-* Retrofit
-* The Movie DB
+* [ButterKnife](https://jakewharton.github.io/butterknife/)
+* [okhttp](https://square.github.io/okhttp/)
+* [Picasso](https://square.github.io/picasso/)
+* [Retrofit](https://square.github.io/retrofit/)
+* [The Movie DB](https://www.themoviedb.org/?language=en-US)
 
 ## Attribution
 All movie data is provided by **The Movie DB**

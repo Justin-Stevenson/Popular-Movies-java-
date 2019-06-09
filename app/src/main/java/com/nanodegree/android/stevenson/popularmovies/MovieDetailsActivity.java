@@ -19,6 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MovieDetailsActivity extends AppCompatActivity {
 
     public static final String MOVIE_KEY = "movie";
@@ -27,28 +30,23 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private static final String INPUT_RELEASE_DATE_FORMAT = "yyyy-MM-dd";
     private static final String OUTPUT_RELEASE_DATE_FORMAT = "MMMM d, yyyy";
 
-    private ImageView mMoviePosterImg;
-    private TextView mMovieTitle;
-    private TextView mReleaseDate;
-    private TextView mUserRating;
-    private TextView mPlotSynopsis;
+    @BindView(R.id.movie_poster_iv) ImageView mMoviePosterImg;
+    @BindView(R.id.movie_title_tv) TextView mMovieTitle;
+    @BindView(R.id.release_date_tv) TextView mReleaseDate;
+    @BindView(R.id.user_rating_tv) TextView mUserRating;
+    @BindView(R.id.plot_synopsis_tv) TextView mPlotSynopsis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+        ButterKnife.bind(this);
 
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        mMoviePosterImg = findViewById(R.id.movie_poster_iv);
-        mMovieTitle = findViewById(R.id.movie_title_tv);
-        mReleaseDate = findViewById(R.id.release_date_tv);
-        mUserRating = findViewById(R.id.user_rating_tv);
-        mPlotSynopsis = findViewById(R.id.plot_synopsis_tv);
 
         Intent intent = getIntent();
         Movie movie = intent.getParcelableExtra(MOVIE_KEY);

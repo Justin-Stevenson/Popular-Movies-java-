@@ -25,6 +25,8 @@ import com.nanodegree.android.stevenson.popularmovies.models.Movie;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,12 +38,12 @@ public class MainActivity extends AppCompatActivity
     private static final String MOVIES_KEY = "movies";
     private static final String CURRENT_SORT_ORDER_KEY = "sort_order";
 
-    private ProgressBar mProgressBar;
-    private ImageView mErrorImg;
-    private TextView mErrorHeading;
-    private TextView mErrorMessage;
-    private Button mErrorButton;
-    private RecyclerView mMoviesGrid;
+    @BindView(R.id.movies_pb) ProgressBar mProgressBar;
+    @BindView(R.id.error_iv) ImageView mErrorImg;
+    @BindView(R.id.error_heading_tv) TextView mErrorHeading;
+    @BindView(R.id.error_message_tv) TextView mErrorMessage;
+    @BindView(R.id.error_btn) Button mErrorButton;
+    @BindView(R.id.movies_rv) RecyclerView mMoviesGrid;
     private SortOrder mCurrentSortOrder;
     private List<Movie> mMovies;
     private MoviesRepository mMoviesRepository;
@@ -50,13 +52,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mProgressBar = findViewById(R.id.movies_pb);
-        mErrorImg = findViewById(R.id.error_iv);
-        mErrorHeading = findViewById(R.id.error_heading_tv);
-        mErrorMessage = findViewById(R.id.error_message_tv);
-        mErrorButton = findViewById(R.id.error_btn);
-        mMoviesGrid = findViewById(R.id.movies_rv);
+        ButterKnife.bind(this);
 
         mErrorButton.setOnClickListener(v -> loadMovies());
 
