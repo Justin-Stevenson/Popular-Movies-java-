@@ -1,5 +1,6 @@
 package com.nanodegree.android.stevenson.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,8 +38,8 @@ public class MainActivity extends AppCompatActivity
         implements MoviesGridAdapter.MovieClickListener {
 
     private static final String TAG = "MainActivity";
-    private static final String MOVIES_KEY = "movies";
-    private static final String CURRENT_SORT_ORDER_KEY = "sort_order";
+    private static final String BUNDLE_MOVIES_KEY = "BUNDLE_MOVIES_KEY";
+    private static final String BUNDLE_CURRENT_SORT_ORDER_KEY = "BUNDLE_CURRENT_SORT_ORDER_KEY";
 
     @BindView(R.id.movies_pb) ProgressBar mProgressBar;
     @BindView(R.id.error_iv) ImageView mErrorImg;
@@ -50,6 +51,13 @@ public class MainActivity extends AppCompatActivity
     private @SortOrder int mCurrentSortOrder;
     private List<Movie> mMovies;
     private MoviesRepository mMoviesRepository;
+
+    public static Intent getStartIntent(Context context, Movie clickedMovie) {
+        Intent intent = new Intent(context, MovieDetailsActivity.class);
+        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_KEY, clickedMovie);
+
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity
 
         if (hasMoviesSaved(savedInstanceState)) {
             mCurrentSortOrder = getCurrentSortOrderFromSavedInstanceState(savedInstanceState);
-            mMovies = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
+            mMovies = savedInstanceState.getParcelableArrayList(BUNDLE_MOVIES_KEY);
             loadMovies(mMovies);
         } else {
             mCurrentSortOrder = SortOrderType.POPULAR;
@@ -76,8 +84,8 @@ public class MainActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         ArrayList<Movie> movies = new ArrayList<>(mMovies);
-        outState.putParcelableArrayList(MOVIES_KEY,movies);
-        outState.putInt(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
+        outState.putParcelableArrayList(BUNDLE_MOVIES_KEY,movies);
+        outState.putInt(BUNDLE_CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
     }
 
     @Override
@@ -112,8 +120,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMovieClick(Movie clickedMovie) {
-        Intent intent = new Intent(this, MovieDetailsActivity.class);
-        intent.putExtra(MovieDetailsActivity.MOVIE_KEY, clickedMovie);
+        Intent intent = getStartIntent(this, clickedMovie);
 
         startActivity(intent);
     }
@@ -197,11 +204,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean hasMoviesSaved(Bundle savedInstanceState) {
-        return savedInstanceState != null && savedInstanceState.getParcelableArrayList(MOVIES_KEY) != null;
+        return savedInstanceState != null && savedInstanceState.getParcelableArrayList(BUNDLE_MOVIES_KEY) != null;
     }
 
     private @SortOrder int getCurrentSortOrderFromSavedInstanceState(Bundle savedInstanceState) {
-        int sortOrderValue = savedInstanceState.getInt(CURRENT_SORT_ORDER_KEY);
+        int sortOrderValue = savedInstanceState.getInt(BUNDLE_CURRENT_SORT_ORDER_KEY);
         return SortOrderType.convert(sortOrderValue);
     }
 }

@@ -19,12 +19,8 @@ import butterknife.OnClick;
 
 public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.MovieViewHolder> {
 
-    public interface MovieClickListener {
-        void onMovieClick(Movie clickedMovie);
-    }
-
     private final List<Movie> mMovies;
-    final private MovieClickListener mMovieClickListener;
+    private final MovieClickListener mMovieClickListener;
 
     public MoviesGridAdapter(List<Movie> movies, MovieClickListener listener) {
         this.mMovies = movies;
@@ -79,5 +75,9 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
             Movie movie = mMovies.get(clickedPosition);
             mMovieClickListener.onMovieClick(movie);
         }
+    }
+
+    public interface MovieClickListener {
+        void onMovieClick(Movie clickedMovie);
     }
 }

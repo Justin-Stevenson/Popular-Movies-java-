@@ -24,7 +24,8 @@ import butterknife.ButterKnife;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
-    public static final String MOVIE_KEY = "movie";
+    public static final String EXTRA_MOVIE_KEY =
+            "com.nanodegree.android.stevenson.popularmovies.EXTRA_MOVIE_KEY";
 
     private static final String TAG = "MovieDetailsActivity";
     private static final String INPUT_RELEASE_DATE_FORMAT = "yyyy-MM-dd";
@@ -49,7 +50,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        Movie movie = intent.getParcelableExtra(MOVIE_KEY);
+        Movie movie = intent.getParcelableExtra(EXTRA_MOVIE_KEY);
 
         displayMovieDetails(movie);
     }
