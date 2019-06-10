@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nanodegree.android.stevenson.popularmovies.common.Error;
-import com.nanodegree.android.stevenson.popularmovies.common.SortOrder;
+import com.nanodegree.android.stevenson.popularmovies.common.SortOrderType;
+import com.nanodegree.android.stevenson.popularmovies.common.SortOrderType.SortOrder;
 import com.nanodegree.android.stevenson.popularmovies.data.MoviesRepository;
 import com.nanodegree.android.stevenson.popularmovies.data.network.helpers.NetworkConnectionException;
 import com.nanodegree.android.stevenson.popularmovies.models.Movie;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,7 +46,8 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.error_message_tv) TextView mErrorMessage;
     @BindView(R.id.error_btn) Button mErrorButton;
     @BindView(R.id.movies_rv) RecyclerView mMoviesGrid;
-    private SortOrder mCurrentSortOrder;
+
+    private @SortOrder int mCurrentSortOrder;
     private List<Movie> mMovies;
     private MoviesRepository mMoviesRepository;
 
@@ -54,20 +57,17 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mErrorButton.setOnClickListener(v -> loadMovies());
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         mMoviesGrid.setLayoutManager(gridLayoutManager);
 
         mMoviesRepository = new MoviesRepository();
 
         if (hasMoviesSaved(savedInstanceState)) {
-            mCurrentSortOrder =
-                    (SortOrder) savedInstanceState.getSerializable(CURRENT_SORT_ORDER_KEY);
+            mCurrentSortOrder = getCurrentSortOrderFromSavedInstanceState(savedInstanceState);
             mMovies = savedInstanceState.getParcelableArrayList(MOVIES_KEY);
             loadMovies(mMovies);
         } else {
-            mCurrentSortOrder = SortOrder.POPULAR;
+            mCurrentSortOrder = SortOrderType.POPULAR;
             loadMovies();
         }
     }
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
         ArrayList<Movie> movies = new ArrayList<>(mMovies);
         outState.putParcelableArrayList(MOVIES_KEY,movies);
-        outState.putSerializable(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
+        outState.putInt(CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
     }
 
     @Override
@@ -93,15 +93,15 @@ public class MainActivity extends AppCompatActivity
 
         switch (selectedItemId) {
             case R.id.action_popular:
-                if (SortOrder.POPULAR != mCurrentSortOrder) {
-                    mCurrentSortOrder = SortOrder.POPULAR;
+                if (SortOrderType.POPULAR != mCurrentSortOrder) {
+                    mCurrentSortOrder = SortOrderType.POPULAR;
                     loadMovies();
                 }
                 return true;
 
             case R.id.action_top_rated:
-                if (SortOrder.TOP_RATED != mCurrentSortOrder) {
-                    mCurrentSortOrder = SortOrder.TOP_RATED;
+                if (SortOrderType.TOP_RATED != mCurrentSortOrder) {
+                    mCurrentSortOrder = SortOrderType.TOP_RATED;
                     loadMovies();
                 }
                 return true;
@@ -118,16 +118,18 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    @OnClick(R.id.error_btn)
+    void loadMovies() {
+        showProgressBar();
+
+        mMoviesRepository.getMovies(mCurrentSortOrder, getMoviesCallback());
+    }
+
+
     private void loadMovies(List<Movie> movies) {
         MoviesGridAdapter moviesGridAdapter = new MoviesGridAdapter(movies, MainActivity.this);
         mMoviesGrid.setAdapter(moviesGridAdapter);
         showMovies();
-    }
-
-    private void loadMovies() {
-        showProgressBar();
-
-        mMoviesRepository.getMovies(mCurrentSortOrder, getMoviesCallback());
     }
 
     private Callback<List<Movie>> getMoviesCallback() {
@@ -196,5 +198,10 @@ public class MainActivity extends AppCompatActivity
 
     private boolean hasMoviesSaved(Bundle savedInstanceState) {
         return savedInstanceState != null && savedInstanceState.getParcelableArrayList(MOVIES_KEY) != null;
+    }
+
+    private @SortOrder int getCurrentSortOrderFromSavedInstanceState(Bundle savedInstanceState) {
+        int sortOrderValue = savedInstanceState.getInt(CURRENT_SORT_ORDER_KEY);
+        return SortOrderType.convert(sortOrderValue);
     }
 }
