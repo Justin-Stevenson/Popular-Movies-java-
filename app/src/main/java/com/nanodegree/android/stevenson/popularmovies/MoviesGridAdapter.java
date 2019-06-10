@@ -13,14 +13,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.MovieViewHolder> {
 
-    public interface MovieClickListener {
-        void onMovieClick(Movie clickedMovie);
-    }
-
     private final List<Movie> mMovies;
-    final private MovieClickListener mMovieClickListener;
+    private final MovieClickListener mMovieClickListener;
 
     public MoviesGridAdapter(List<Movie> movies, MovieClickListener listener) {
         this.mMovies = movies;
@@ -49,12 +49,11 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
     class MovieViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
-        final ImageView mMoviePosterImg;
+        @BindView(R.id.movie_poster_iv) ImageView mMoviePosterImg;
 
         MovieViewHolder(@NonNull View itemView) {
             super(itemView);
-            mMoviePosterImg = itemView.findViewById(R.id.movie_poster_iv);
-            itemView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
         }
 
         void bind(int positionIndex) {
@@ -69,11 +68,16 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
             mMoviePosterImg.setContentDescription(movie.getTitle());
         }
 
+        @OnClick
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
             Movie movie = mMovies.get(clickedPosition);
             mMovieClickListener.onMovieClick(movie);
         }
+    }
+
+    public interface MovieClickListener {
+        void onMovieClick(Movie clickedMovie);
     }
 }
