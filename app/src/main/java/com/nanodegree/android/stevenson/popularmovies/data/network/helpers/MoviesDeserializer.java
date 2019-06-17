@@ -6,7 +6,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.nanodegree.android.stevenson.popularmovies.models.Movie;
+import com.nanodegree.android.stevenson.popularmovies.model.Movie;
 
 import java.lang.reflect.Type;
 import java.util.List;

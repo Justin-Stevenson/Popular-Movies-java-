@@ -24,6 +24,10 @@
     <string name="default_movie_poster_content_description">Movie poster image</string>
     <string name="movie_poster_content_description">%1$s movie poster</string>
 
+    <!-- Movie backdrop image -->
+    <string name="default_movie_backdrop_content_description">Movie backdrop image</string>
+    <string name="movie_backdrop_content_description">%1$s movie backdrop</string>
+
     <!-- Movies option menu-->
     <string name="action_popular">Popular</string>
     <string name="action_top_rated">Top Rated</string>

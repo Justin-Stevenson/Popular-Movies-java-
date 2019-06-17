@@ -1,4 +1,4 @@
-package com.nanodegree.android.stevenson.popularmovies;
+package com.nanodegree.android.stevenson.popularmovies.ui.list;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +14,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nanodegree.android.stevenson.popularmovies.data.local.MoviesDao;
+import com.nanodegree.android.stevenson.popularmovies.data.local.MoviesDatabase;
+import com.nanodegree.android.stevenson.popularmovies.data.network.MoviesService;
+import com.nanodegree.android.stevenson.popularmovies.data.network.ServiceFactory;
+import com.nanodegree.android.stevenson.popularmovies.ui.detail.MovieDetailsActivity;
+import com.nanodegree.android.stevenson.popularmovies.R;
 import com.nanodegree.android.stevenson.popularmovies.common.Error;
 import com.nanodegree.android.stevenson.popularmovies.common.SortOrderType;
 import com.nanodegree.android.stevenson.popularmovies.common.SortOrderType.SortOrder;
 import com.nanodegree.android.stevenson.popularmovies.data.MoviesRepository;
 import com.nanodegree.android.stevenson.popularmovies.data.network.helpers.NetworkConnectionException;
-import com.nanodegree.android.stevenson.popularmovies.models.Movie;
+import com.nanodegree.android.stevenson.popularmovies.model.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private static final String BUNDLE_MOVIES_KEY = "BUNDLE_MOVIES_KEY";
     private static final String BUNDLE_CURRENT_SORT_ORDER_KEY = "BUNDLE_CURRENT_SORT_ORDER_KEY";
 
+    @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.movies_pb) ProgressBar mProgressBar;
     @BindView(R.id.error_iv) ImageView mErrorImg;
     @BindView(R.id.error_heading_tv) TextView mErrorHeading;
@@ -65,10 +73,18 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         mMoviesGrid.setLayoutManager(gridLayoutManager);
 
-        mMoviesRepository = new MoviesRepository();
+        MoviesService moviesService = ServiceFactory.getService(MoviesService.class);
+        MoviesDatabase database = MoviesDatabase.getInstance(getApplication());
+        MoviesDao moviesDao = database.moviesDao();
+        mMoviesRepository = MoviesRepository.getInstance(moviesService, moviesDao);
 
         if (hasMoviesSaved(savedInstanceState)) {
             mCurrentSortOrder = getCurrentSortOrderFromSavedInstanceState(savedInstanceState);

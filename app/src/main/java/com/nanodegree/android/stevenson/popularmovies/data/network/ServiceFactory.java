@@ -6,7 +6,11 @@ import com.google.gson.reflect.TypeToken;
 import com.nanodegree.android.stevenson.popularmovies.data.network.helpers.ApiKeyInterceptor;
 import com.nanodegree.android.stevenson.popularmovies.data.network.helpers.MoviesDeserializer;
 import com.nanodegree.android.stevenson.popularmovies.data.network.helpers.NetworkConnectionInterceptor;
-import com.nanodegree.android.stevenson.popularmovies.models.Movie;
+import com.nanodegree.android.stevenson.popularmovies.data.network.helpers.ReviewsDeserializer;
+import com.nanodegree.android.stevenson.popularmovies.data.network.helpers.TrailersDeserializer;
+import com.nanodegree.android.stevenson.popularmovies.model.Movie;
+import com.nanodegree.android.stevenson.popularmovies.model.Review;
+import com.nanodegree.android.stevenson.popularmovies.model.Trailer;
 
 import java.util.List;
 
@@ -30,6 +34,8 @@ public class ServiceFactory {
     private static final Gson gson =
             new GsonBuilder()
                 .registerTypeAdapter(new TypeToken<List<Movie>>() {}.getType(), new MoviesDeserializer())
+                .registerTypeAdapter(new TypeToken<List<Trailer>>() {}.getType(), new TrailersDeserializer())
+                .registerTypeAdapter(new TypeToken<List<Review>>() {}.getType(), new ReviewsDeserializer())
                 .create();
 
     private static final Retrofit.Builder builder =
