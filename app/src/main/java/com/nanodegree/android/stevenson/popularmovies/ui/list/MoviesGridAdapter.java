@@ -12,6 +12,7 @@ import com.nanodegree.android.stevenson.popularmovies.R;
 import com.nanodegree.android.stevenson.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -20,11 +21,10 @@ import butterknife.OnClick;
 
 public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.MovieViewHolder> {
 
-    private final List<Movie> mMovies;
+    private List<Movie> mMovies = new ArrayList<>();
     private final MovieClickListener mMovieClickListener;
 
-    public MoviesGridAdapter(List<Movie> movies, MovieClickListener listener) {
-        this.mMovies = movies;
+    public MoviesGridAdapter(MovieClickListener listener) {
         this.mMovieClickListener = listener;
     }
 
@@ -45,6 +45,16 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
     @Override
     public int getItemCount() {
         return (mMovies != null) ? mMovies.size() : 0;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        if (movies != null) {
+            this.mMovies = movies;
+        } else {
+            this.mMovies = new ArrayList<>();
+        }
+
+        notifyDataSetChanged();
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder
