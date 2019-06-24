@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Popular Movies</string>
 
+    <!-- Shared preferences keys -->
+    <string name="pref_sort_order">sortorder</string>
+    <string name="pref_sort_order_default">POPULAR</string>
+
     <!-- Details action bar display title-->
     <string name="details_activity_display_title">Movie Details</string>
 
@@ -31,6 +35,7 @@
     <!-- Movies option menu-->
     <string name="action_popular">Popular</string>
     <string name="action_top_rated">Top Rated</string>
+    <string name="action_favorites">Favorites</string>
 
     <!-- Movie Details labels -->
     <string name="details_release_date">Release Date</string>
@@ -40,4 +45,11 @@
     <!-- Movie Details values -->
     <string name="user_rating_text">%1$s / 10</string>
 
+    <!-- Toast messages -->
+    <string name="toast_no_favorites">No favorites exist. You will need to select some favorites from Top Rated or Popular movies.</string>
+    <string name="toast_no_trailers">No trailers exist for %1$s so the trailer\'s YouTube link cannot be shared.</string>
+    <string name="toast_no_share_app">No apps exist on this device to share the YouTube video url.</string>
+
+    <!-- Share YouTube message-->
+    <string name="share_youtube_message">Here is the link for the %1$s trailer.\n\n %2$s</string>
 </resources>

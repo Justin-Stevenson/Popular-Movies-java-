@@ -9,10 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nanodegree.android.stevenson.popularmovies.R;
+import com.nanodegree.android.stevenson.popularmovies.common.UrlUtility;
 import com.nanodegree.android.stevenson.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -21,10 +21,13 @@ import butterknife.OnClick;
 
 public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.MovieViewHolder> {
 
-    private List<Movie> mMovies = new ArrayList<>();
+    private static final String TAG = "MoviesGridAdapter";
+
+    private List<Movie> mMovies;
     private final MovieClickListener mMovieClickListener;
 
-    public MoviesGridAdapter(MovieClickListener listener) {
+    public MoviesGridAdapter(List<Movie> movies, MovieClickListener listener) {
+        this.mMovies = movies;
         this.mMovieClickListener = listener;
     }
 
@@ -47,16 +50,6 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
         return (mMovies != null) ? mMovies.size() : 0;
     }
 
-    public void setMovies(List<Movie> movies) {
-        if (movies != null) {
-            this.mMovies = movies;
-        } else {
-            this.mMovies = new ArrayList<>();
-        }
-
-        notifyDataSetChanged();
-    }
-
     class MovieViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
@@ -68,9 +61,10 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
         }
 
         void bind(int positionIndex) {
-            Movie movie = mMovies.get(positionIndex);
+            final Movie movie = mMovies.get(positionIndex);
+
             Picasso.get()
-                    .load(movie.getPoster())
+                    .load(UrlUtility.getPosterUrl(movie))
                     .fit()
                     .placeholder(R.drawable.movie_frame_placeholder)
                     .error(R.drawable.data_retrieval_error)

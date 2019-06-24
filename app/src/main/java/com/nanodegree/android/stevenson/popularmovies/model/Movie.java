@@ -12,9 +12,6 @@ import com.google.gson.annotations.SerializedName;
 @Entity
 public class Movie implements Parcelable {
 
-    private static final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185/";
-    private static final String BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w342/";
-
     @PrimaryKey
     @NonNull
     private String id;
@@ -78,7 +75,7 @@ public class Movie implements Parcelable {
     }
 
     public String getPoster() {
-        return IMAGE_BASE_URL + poster;
+        return poster;
     }
 
     public void setPoster(String poster) {
@@ -86,7 +83,7 @@ public class Movie implements Parcelable {
     }
 
     public String getBackdrop() {
-        return BACKDROP_BASE_URL + backdrop;
+        return backdrop;
     }
 
     public void setBackdrop(String backdrop) {

@@ -46,12 +46,11 @@
     <include layout="@layout/partial_movie_details_content" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/favorite_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@color/colorPrimary"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_favorite_border" />
+        android:layout_gravity="bottom|end"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

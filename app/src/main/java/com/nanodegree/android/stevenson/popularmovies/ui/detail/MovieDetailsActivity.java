@@ -1,10 +1,11 @@
 package com.nanodegree.android.stevenson.popularmovies.ui.detail;
 
-import android.content.Context;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,19 +16,24 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
+import androidx.core.app.ShareCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nanodegree.android.stevenson.popularmovies.R;
+import com.nanodegree.android.stevenson.popularmovies.common.AppExecutors;
+import com.nanodegree.android.stevenson.popularmovies.common.UrlUtility;
 import com.nanodegree.android.stevenson.popularmovies.data.MoviesRepository;
-import com.nanodegree.android.stevenson.popularmovies.data.local.MoviesDao;
-import com.nanodegree.android.stevenson.popularmovies.data.local.MoviesDatabase;
-import com.nanodegree.android.stevenson.popularmovies.data.network.MoviesService;
-import com.nanodegree.android.stevenson.popularmovies.data.network.ServiceFactory;
 import com.nanodegree.android.stevenson.popularmovies.model.Movie;
 import com.nanodegree.android.stevenson.popularmovies.model.Review;
 import com.nanodegree.android.stevenson.popularmovies.model.Trailer;
+import com.nanodegree.android.stevenson.popularmovies.viewmodel.MovieDetailsViewModel;
+import com.nanodegree.android.stevenson.popularmovies.viewmodel.MovieDetailsViewModelFactory;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -38,6 +44,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,13 +69,19 @@ public class MovieDetailsActivity extends AppCompatActivity
     @BindView(R.id.toolbar_layout) CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.trailers_rv) RecyclerView mTrailersRecyclerView;
     @BindView(R.id.reviews_rv) RecyclerView mReviewsRecyclerView;
+    @BindView(R.id.favorite_fab) FloatingActionButton mFavoriteFab;
 
     private MoviesRepository mMoviesRepository;
     private List<Trailer> mTrailers;
     private List<Review> mReviews;
+    private Movie mMovie;
+    private boolean mIsFavorite;
+    private MovieDetailsViewModel mViewModel;
 
-    public static Intent getStartIntent(Context context, Trailer clickedTrailer) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + clickedTrailer.getKey()));
+    public static Intent getStartIntent(Trailer clickedTrailer) {
+        Intent intent = new Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(UrlUtility.getYoutTubeUrl(clickedTrailer)));
 
         return intent;
     }
@@ -86,33 +99,44 @@ public class MovieDetailsActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        MoviesService moviesService = ServiceFactory.getService(MoviesService.class);
-        MoviesDatabase database = MoviesDatabase.getInstance(getApplication());
-        MoviesDao moviesDao = database.moviesDao();
-        mMoviesRepository = MoviesRepository.getInstance(moviesService, moviesDao);
+        mMoviesRepository = MoviesRepository.getInstance(getApplication());
 
-        LinearLayoutManager trailersLayoutManager = new LinearLayoutManager(MovieDetailsActivity.this, RecyclerView.HORIZONTAL, false);
-        mTrailersRecyclerView.setLayoutManager(trailersLayoutManager);
-
-        LinearLayoutManager reviewsLayoutManager = new LinearLayoutManager(MovieDetailsActivity.this, RecyclerView.VERTICAL, false);
-        mReviewsRecyclerView.setLayoutManager(reviewsLayoutManager);
-        mReviewsRecyclerView.setNestedScrollingEnabled(false);
+        setupTrailers();
+        setupReviews();
 
 
         Intent intent = getIntent();
-        Movie movie = intent.getParcelableExtra(EXTRA_MOVIE_KEY);
+        mMovie = intent.getParcelableExtra(EXTRA_MOVIE_KEY);
 
-        displayMovieDetails(movie);
-        displayTrailers(movie);
-        displayReviews(movie);
+        MovieDetailsViewModelFactory factory =
+                new MovieDetailsViewModelFactory(mMoviesRepository, mMovie.getId());
+
+        mViewModel = ViewModelProviders.of(this, factory).get(MovieDetailsViewModel.class);
+
+        displayMovieDetails(mMovie);
+        displayTrailers(mMovie);
+        displayReviews(mMovie);
+        initializeFavoriteButton();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.movie_details_options, menu);
+
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int selectedId = item.getItemId();
 
-        if (selectedId == android.R.id.home) {
+        switch (selectedId) {
+            case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
+                return true;
+
+            case R.id.action_share_movie:
+                shareYoutubeLink();
                 return true;
         }
 
@@ -121,21 +145,41 @@ public class MovieDetailsActivity extends AppCompatActivity
 
     @Override
     public void onTrailerClick(Trailer clickedTrailer) {
-        Intent intent = getStartIntent(this, clickedTrailer);
+        Intent intent = getStartIntent(clickedTrailer);
 
         startActivity(intent);
     }
 
+    @OnClick(R.id.favorite_fab)
+    public void onFavoriteClick() {
+        mIsFavorite = !mIsFavorite;
+
+        updateFavoriteButton(mIsFavorite);
+
+        if (mIsFavorite) {
+            AppExecutors.getInstance()
+                    .diskIO()
+                    .execute(() -> mMoviesRepository.addFavoriteMovie(mMovie));
+        } else {
+            AppExecutors.getInstance()
+                    .diskIO()
+                    .execute(() -> mMoviesRepository.removeFavoriteMovie(mMovie));
+        }
+    }
+
     private void displayMovieDetails(Movie movie) {
+        final String posterUrl = UrlUtility.getPosterUrl(movie);
+        final String backdropUrl = UrlUtility.getBackdropUrl(movie);
+
         Picasso.get()
-                .load(movie.getPoster())
+                .load(posterUrl)
                 .fit()
                 .placeholder(R.drawable.movie_frame_placeholder)
                 .error(R.drawable.data_retrieval_error)
                 .into(mMoviePosterImg);
 
         Picasso.get()
-                .load(movie.getBackdrop())
+                .load(backdropUrl)
                 .placeholder(R.drawable.movie_frame_placeholder)
                 .error(R.drawable.data_retrieval_error)
                 .into(mMovieBackdropImg);
@@ -165,7 +209,8 @@ public class MovieDetailsActivity extends AppCompatActivity
             public void onResponse(Call<List<Trailer>> call, Response<List<Trailer>> response) {
                 if (response.isSuccessful()) {
                     mTrailers = response.body();
-                    TrailersAdapter trailersAdapter = new TrailersAdapter(mTrailers, MovieDetailsActivity.this);
+                    TrailersAdapter trailersAdapter =
+                            new TrailersAdapter(mTrailers, MovieDetailsActivity.this);
                     mTrailersRecyclerView.setAdapter(trailersAdapter);
                 } else {
                     Log.e(TAG, "onResponse: error retrieving movie trailers");
@@ -205,14 +250,79 @@ public class MovieDetailsActivity extends AppCompatActivity
 
     private String formatReleaseDate(String releaseDate) {
         try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat(INPUT_RELEASE_DATE_FORMAT, Locale.US);
+            SimpleDateFormat inputFormat =
+                    new SimpleDateFormat(INPUT_RELEASE_DATE_FORMAT, Locale.US);
             Date date = inputFormat.parse(releaseDate);
 
-            SimpleDateFormat outputFormatter = new SimpleDateFormat(OUTPUT_RELEASE_DATE_FORMAT, Locale.US);
+            SimpleDateFormat outputFormatter =
+                    new SimpleDateFormat(OUTPUT_RELEASE_DATE_FORMAT, Locale.US);
             return outputFormatter.format(date);
         } catch (ParseException pe) {
             Log.e(TAG, "formatReleaseDate: error formatting release date", pe);
             return releaseDate;
         }
+    }
+
+    private void updateFavoriteButton(boolean isFavorite) {
+        int iconId = (isFavorite) ? R.drawable.ic_favorite : R.drawable.ic_favorite_border;
+
+        mFavoriteFab.setImageDrawable(ContextCompat.getDrawable(this, iconId));
+    }
+
+    private void initializeFavoriteButton() {
+        mViewModel.getMovie().observe(this, new Observer<Movie>() {
+            @Override
+            public void onChanged(Movie movie) {
+                mIsFavorite = (movie != null) ? true : false;
+                Log.e(TAG, "onChanged: favorite: " + mIsFavorite);
+                updateFavoriteButton(mIsFavorite);
+
+                mViewModel.getMovie().removeObserver(this);
+            }
+        });
+    }
+
+    private void shareYoutubeLink() {
+        if (mTrailers == null || mTrailers.isEmpty()) {
+            Toast.makeText(
+                    MovieDetailsActivity.this,
+                    R.string.toast_no_trailers,
+                    Toast.LENGTH_LONG
+            ).show();
+        } else {
+
+            Trailer trailer = mTrailers.get(0);
+            String trailerUrl = UrlUtility.getYoutTubeUrl(trailer);
+            String message = getString(R.string.share_youtube_message, mMovie.getTitle(), trailerUrl);
+            ShareCompat.IntentBuilder intentBuilder =
+                    ShareCompat.IntentBuilder.from(MovieDetailsActivity.this)
+                            .setText(message)
+                            .setType("text/plain");
+
+            try {
+                intentBuilder.startChooser();
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(
+                        MovieDetailsActivity.this,
+                        R.string.toast_no_share_app,
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        }
+    }
+
+    private void setupTrailers() {
+        LinearLayoutManager trailersLayoutManager = getLinearLayoutManager(RecyclerView.HORIZONTAL);
+        mTrailersRecyclerView.setLayoutManager(trailersLayoutManager);
+    }
+
+    private void setupReviews() {
+        LinearLayoutManager reviewsLayoutManager = getLinearLayoutManager(RecyclerView.VERTICAL);
+        mReviewsRecyclerView.setLayoutManager(reviewsLayoutManager);
+        mReviewsRecyclerView.setNestedScrollingEnabled(false);
+    }
+
+    private LinearLayoutManager getLinearLayoutManager(int orientation) {
+        return new LinearLayoutManager(this, orientation, false);
     }
 }

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nanodegree.android.stevenson.popularmovies.R;
+import com.nanodegree.android.stevenson.popularmovies.common.UrlUtility;
 import com.nanodegree.android.stevenson.popularmovies.model.Trailer;
 import com.squareup.picasso.Picasso;
 
@@ -60,8 +61,9 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 
         void bind(int positionIndex) {
             Trailer trailer = mTrailers.get(positionIndex);
+
             Picasso.get()
-                    .load("http://img.youtube.com/vi/" + trailer.getKey() + "/mqdefault.jpg")
+                    .load(UrlUtility.getYouTubeImageUrl(trailer))
                     .fit()
                     .placeholder(R.drawable.movie_frame_placeholder)
                     .error(R.drawable.data_retrieval_error)
