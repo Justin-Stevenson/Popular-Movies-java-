@@ -48,12 +48,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
         @BindView(R.id.author_tv) TextView mAuthor;
         @BindView(R.id.content_tv) TextView mContent;
 
-        public ReviewViewHolder(@NonNull View itemView) {
+        ReviewViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(int positionIndex) {
+        void bind(int positionIndex) {
             Review review = mReviews.get(positionIndex);
 
             mAuthor.setText(review.getAuthor());

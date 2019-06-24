@@ -45,11 +45,14 @@
     <!-- Movie Details values -->
     <string name="user_rating_text">%1$s / 10</string>
 
+    <!-- Movie Details option menu -->
+    <string name="action_share">Share</string>
+
     <!-- Toast messages -->
     <string name="toast_no_favorites">No favorites exist. You will need to select some favorites from Top Rated or Popular movies.</string>
     <string name="toast_no_trailers">No trailers exist for %1$s so the trailer\'s YouTube link cannot be shared.</string>
     <string name="toast_no_share_app">No apps exist on this device to share the YouTube video url.</string>
 
     <!-- Share YouTube message-->
-    <string name="share_youtube_message">Here is the link for the %1$s trailer.\n\n %2$s</string>
+    <string name="share_youtube_message">Here is the link for the %1$s trailer.\n %2$s</string>
 </resources>

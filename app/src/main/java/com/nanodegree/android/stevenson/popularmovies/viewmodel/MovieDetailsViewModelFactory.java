@@ -9,7 +9,7 @@ import com.nanodegree.android.stevenson.popularmovies.data.MoviesRepository;
 public class MovieDetailsViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final MoviesRepository mRepository;
-    private String mMovieId;
+    private final String mMovieId;
 
     public MovieDetailsViewModelFactory(MoviesRepository repository, String movieId) {
         this.mRepository = repository;

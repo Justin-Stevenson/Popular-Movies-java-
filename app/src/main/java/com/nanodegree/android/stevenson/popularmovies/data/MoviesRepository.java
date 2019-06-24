@@ -26,8 +26,8 @@ public class MoviesRepository {
 
     private static MoviesRepository sInstance;
 
-    private MoviesService mMoviesService;
-    private MoviesDao mMoviesDao;
+    private final MoviesService mMoviesService;
+    private final MoviesDao mMoviesDao;
 
     private MoviesRepository(Application application) {
         mMoviesService = ServiceFactory.getService(MoviesService.class);

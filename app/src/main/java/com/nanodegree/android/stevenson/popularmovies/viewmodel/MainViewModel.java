@@ -11,7 +11,7 @@ import java.util.List;
 public class MainViewModel extends ViewModel {
 
     private final MoviesRepository mRepository;
-    private LiveData<List<Movie>> mFavoriteMovies;
+    private final LiveData<List<Movie>> mFavoriteMovies;
 
     public MainViewModel(MoviesRepository mRepository) {
         this.mRepository = mRepository;

@@ -8,8 +8,8 @@ import com.nanodegree.android.stevenson.popularmovies.model.Movie;
 
 public class MovieDetailsViewModel extends ViewModel {
 
-    private MoviesRepository mRepository;
-    private LiveData<Movie> mMovie;
+    private final MoviesRepository mRepository;
+    private final LiveData<Movie> mMovie;
 
     public MovieDetailsViewModel(MoviesRepository repository, String movieId) {
         mRepository = repository;

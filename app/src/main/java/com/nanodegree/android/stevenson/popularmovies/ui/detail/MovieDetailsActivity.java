@@ -79,11 +79,9 @@ public class MovieDetailsActivity extends AppCompatActivity
     private MovieDetailsViewModel mViewModel;
 
     public static Intent getStartIntent(Trailer clickedTrailer) {
-        Intent intent = new Intent(
+        return new Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse(UrlUtility.getYoutTubeUrl(clickedTrailer)));
-
-        return intent;
+                Uri.parse(UrlUtility.getYouTubeVideoUrl(clickedTrailer)));
     }
 
     @Override
@@ -273,8 +271,8 @@ public class MovieDetailsActivity extends AppCompatActivity
         mViewModel.getMovie().observe(this, new Observer<Movie>() {
             @Override
             public void onChanged(Movie movie) {
-                mIsFavorite = (movie != null) ? true : false;
-                Log.e(TAG, "onChanged: favorite: " + mIsFavorite);
+                mIsFavorite = movie != null;
+
                 updateFavoriteButton(mIsFavorite);
 
                 mViewModel.getMovie().removeObserver(this);
@@ -292,7 +290,7 @@ public class MovieDetailsActivity extends AppCompatActivity
         } else {
 
             Trailer trailer = mTrailers.get(0);
-            String trailerUrl = UrlUtility.getYoutTubeUrl(trailer);
+            String trailerUrl = UrlUtility.getYouTubeVideoUrl(trailer);
             String message = getString(R.string.share_youtube_message, mMovie.getTitle(), trailerUrl);
             ShareCompat.IntentBuilder intentBuilder =
                     ShareCompat.IntentBuilder.from(MovieDetailsActivity.this)

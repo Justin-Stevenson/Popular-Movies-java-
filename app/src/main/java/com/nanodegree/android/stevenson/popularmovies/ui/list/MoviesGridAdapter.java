@@ -21,9 +21,7 @@ import butterknife.OnClick;
 
 public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.MovieViewHolder> {
 
-    private static final String TAG = "MoviesGridAdapter";
-
-    private List<Movie> mMovies;
+    private final List<Movie> mMovies;
     private final MovieClickListener mMovieClickListener;
 
     public MoviesGridAdapter(List<Movie> movies, MovieClickListener listener) {

@@ -4,5 +4,5 @@ public enum SortOrder {
 
     POPULAR,
     TOP_RATED,
-    FAVORITES;
+    FAVORITES
 }
