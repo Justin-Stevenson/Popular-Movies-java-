@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity
 public class Movie implements Parcelable {
 
@@ -36,7 +38,7 @@ public class Movie implements Parcelable {
     public Movie() {}
 
     private Movie(Parcel in) {
-        id = in.readString();
+        id = Objects.requireNonNull(in.readString());
         title = in.readString();
         poster = in.readString();
         backdrop = in.readString();

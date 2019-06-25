@@ -32,34 +32,77 @@
 
     <!-- Movie Details image -->
     <dimen name="details_movie_poster_iv_width">0dp</dimen>
-    <dimen name="details_movie_poster_iv_height">0dp</dimen>
+    <dimen name="details_movie_poster_iv_height">175dp</dimen>
     <dimen name="details_movie_poster_iv_margin">8dp</dimen>
     <item name="details_movie_poster_iv_dimension_ratio" format="string" type="dimen">2:3</item>
 
-    <!-- Movie Details guideline -->
-    <dimen name="details_vertical_guideline_height">0dp</dimen>
-    <item name="details_vertical_guideline_constraint_percent" format="float" type="dimen">0.6</item>
-
     <!-- Movie Details title -->
     <dimen name="details_movie_title_tv_width">0dp</dimen>
-    <dimen name="details_movie_title_tv_text_size">25sp</dimen>
-    <dimen name="details_movie_title_tv_margin">8dp</dimen>
+    <dimen name="details_movie_title_tv_text_size">24sp</dimen>
+    <dimen name="details_movie_title_tv_margin">16dp</dimen>
 
-    <!-- Movie Details labels -->
-    <dimen name="details_label_width">0dp</dimen>
-    <dimen name="details_label_margin_top">32dp</dimen>
-    <dimen name="details_label_margin_side">16dp</dimen>
-    <dimen name="details_label_text_size">20sp</dimen>
+    <!-- Movie Details release date -->
+    <dimen name="details_movie_release_date_tv_width">0dp</dimen>
+    <dimen name="details_movie_release_date_tv_text_size">14sp</dimen>
+    <dimen name="details_movie_release_date_tv_margin">8dp</dimen>
 
-    <!-- Movie Details values -->
-    <dimen name="details_value_width">0dp</dimen>
-    <dimen name="details_value_margin_side">16dp</dimen>
-    <dimen name="details_value_text_size">15sp</dimen>
+    <!-- Movie Details user rating -->
+    <dimen name="details_movie_user_rating_iv_size">24dp</dimen>
+    <dimen name="details_movie_user_rating_iv_margin">16dp</dimen>
+    <dimen name="details_movie_user_rating_tv_width">0dp</dimen>
+    <dimen name="details_movie_user_rating_tv_text_size">20sp</dimen>
+    <dimen name="details_movie_user_rating_tv_margin">8dp</dimen>
+
+    <!-- Movie Details plot synopsis -->
+    <dimen name="details_synopsis_tv_width">0dp</dimen>
+    <dimen name="details_synopsis_tv_margin">16dp</dimen>
+    <dimen name="details_synopsis_label_tv_text_size">16sp</dimen>
+    <dimen name="details_synopsis_value_tv_text_size">14sp</dimen>
+
+    <!-- Movie Details linear layouts -->
+    <dimen name="details_ll_margin">16dp</dimen>
+
+    <!-- Movie Details trailers label -->
+    <dimen name="details_trailers_label_tv_text_size">16sp</dimen>
+
+    <!-- Movie Details reviews label -->
+    <dimen name="details_reviews_label_tv_text_size">16sp</dimen>
 
     <!-- Movie Details toolbar -->
     <dimen name="details_toolbar_height">300dp</dimen>
 
-    <!-- Movie Details fab -->
-    <dimen name="fab_margin">16dp</dimen>
+    <!-- Movie Details backdrop -->
+    <item name="details_backdrop_iv_parallax_multiplier_percent" format="float" type="dimen">0.7</item>
 
+    <!-- Movie Details favorite -->
+    <dimen name="details_favorite_fab_margin">16dp</dimen>
+
+    <!-- Review CardView -->
+    <dimen name="review_cv_margin">8dp</dimen>
+
+    <!-- Review ConstraintLayout -->
+    <dimen name="review_cl_margin">16dp</dimen>
+
+    <!-- Review author -->
+    <dimen name="review_author_tv_width">0dp</dimen>
+    <dimen name="review_author_tv_text_size">14sp</dimen>
+
+    <!-- Review content -->
+    <dimen name="review_content_tv_width">0dp</dimen>
+    <dimen name="review_content_tv_text_size">14sp</dimen>
+    <dimen name="review_content_tv_margin_top">8dp</dimen>
+    <dimen name="review_content_tv_margin_bottom">16dp</dimen>
+
+    <!-- Trailer CardView -->
+    <dimen name="trailer_cv_width">200dp</dimen>
+    <dimen name="trailer_cv_height">150dp</dimen>
+    <dimen name="trailer_cv_margin">8dp</dimen>
+
+    <!-- Trailer image -->
+    <dimen name="trailer_iv_size">0dp</dimen>
+    <item name="trailer_iv_dimension_ratio" format="string" type="dimen">4:3</item>
+
+    <!-- Trailer play button -->
+    <dimen name="trailer_play_iv_size">45dp</dimen>
+    <dimen name="trailer_play_iv_elevation">2dp</dimen>
 </resources>

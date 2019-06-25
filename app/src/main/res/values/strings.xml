@@ -3,7 +3,6 @@
 
     <!-- Shared preferences keys -->
     <string name="pref_sort_order">sortorder</string>
-    <string name="pref_sort_order_default">POPULAR</string>
 
     <!-- Details action bar display title-->
     <string name="details_activity_display_title">Movie Details</string>
@@ -38,15 +37,22 @@
     <string name="action_favorites">Favorites</string>
 
     <!-- Movie Details labels -->
-    <string name="details_release_date">Release Date</string>
-    <string name="details_user_rating">User Rating</string>
     <string name="details_plot_synopsis">Plot Synopsis</string>
+    <string name="details_trailers">Trailers</string>
+    <string name="details_reviews">Reviews</string>
 
-    <!-- Movie Details values -->
+    <!-- Movie Details user rating -->
     <string name="user_rating_text">%1$s / 10</string>
+    <string name="user_rating_iv_content_description">User rating star icon</string>
 
     <!-- Movie Details option menu -->
     <string name="action_share">Share</string>
+
+    <!-- Trailer image-->
+    <string name="trailer_iv_content_description">Movie trailer image</string>
+
+    <!-- Trailer play button -->
+    <string name="trailer_play_iv_content_description">Play movie trailer</string>
 
     <!-- Toast messages -->
     <string name="toast_no_favorites">No favorites exist. You will need to select some favorites from Top Rated or Popular movies.</string>

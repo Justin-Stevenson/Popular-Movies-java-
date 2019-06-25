@@ -21,7 +21,7 @@
             <ImageView
                 android:id="@+id/movie_poster_iv"
                 android:layout_width="@dimen/details_movie_poster_iv_width"
-                android:layout_height="175dp"
+                android:layout_height="@dimen/details_movie_poster_iv_height"
                 android:layout_margin="@dimen/details_movie_poster_iv_margin"
                 android:contentDescription="@string/default_movie_poster_content_description"
                 app:layout_constraintDimensionRatio="@dimen/details_movie_poster_iv_dimension_ratio"
@@ -32,12 +32,12 @@
 
             <TextView
                 android:id="@+id/movie_title_tv"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/details_movie_title_tv_width"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:textSize="24sp"
+                android:layout_marginTop="@dimen/details_movie_title_tv_margin"
+                android:layout_marginLeft="@dimen/details_movie_title_tv_margin"
+                android:layout_marginRight="@dimen/details_movie_title_tv_margin"
+                android:textSize="@dimen/details_movie_title_tv_text_size"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@id/movie_poster_iv"
@@ -46,30 +46,31 @@
 
             <TextView
                 android:id="@+id/release_date_tv"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/details_movie_release_date_tv_width"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textSize="14sp"
+                android:layout_marginTop="@dimen/details_movie_release_date_tv_margin"
+                android:textSize="@dimen/details_movie_release_date_tv_text_size"
                 app:layout_constraintTop_toBottomOf="@id/movie_title_tv"
                 app:layout_constraintStart_toStartOf="@id/movie_title_tv"
                 tools:text="@sample/release_date"/>
 
             <ImageView
                 android:id="@+id/user_rating_iv"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/details_movie_user_rating_iv_size"
+                android:layout_height="@dimen/details_movie_user_rating_iv_size"
                 android:src="@drawable/ic_star"
-                android:layout_marginTop="16dp"
+                android:contentDescription="@string/user_rating_iv_content_description"
+                android:layout_marginTop="@dimen/details_movie_user_rating_iv_margin"
                 app:layout_constraintTop_toBottomOf="@id/release_date_tv"
                 app:layout_constraintStart_toStartOf="@id/release_date_tv"/>
 
             <TextView
                 android:id="@+id/user_rating_tv"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/details_movie_user_rating_tv_width"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:textSize="20sp"
+                android:layout_marginLeft="@dimen/details_movie_user_rating_tv_margin"
+                android:layout_marginRight="@dimen/details_movie_user_rating_tv_margin"
+                android:textSize="@dimen/details_movie_user_rating_tv_text_size"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="@id/user_rating_iv"
                 app:layout_constraintBottom_toBottomOf="@id/user_rating_iv"
@@ -78,24 +79,24 @@
 
             <TextView
                 android:id="@+id/plot_synopsis_label_tv"
-                android:layout_width="@dimen/details_label_width"
+                android:layout_width="@dimen/details_synopsis_tv_width"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="@dimen/details_label_margin_side"
-                android:layout_marginLeft="@dimen/details_label_margin_side"
+                android:layout_marginTop="@dimen/details_synopsis_tv_margin"
+                android:layout_marginRight="@dimen/details_synopsis_tv_margin"
+                android:layout_marginLeft="@dimen/details_synopsis_tv_margin"
                 android:text="@string/details_plot_synopsis"
-                android:textSize="16sp"
+                android:textSize="@dimen/details_synopsis_label_tv_text_size"
                 app:layout_constraintTop_toBottomOf="@id/movie_poster_iv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/plot_synopsis_tv"
-                android:layout_width="@dimen/details_value_width"
+                android:layout_width="@dimen/details_synopsis_tv_width"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/details_value_margin_side"
-                android:layout_marginLeft="@dimen/details_value_margin_side"
-                android:textSize="14sp"
+                android:layout_marginRight="@dimen/details_synopsis_tv_margin"
+                android:layout_marginLeft="@dimen/details_synopsis_tv_margin"
+                android:textSize="@dimen/details_synopsis_value_tv_text_size"
                 app:layout_constraintTop_toBottomOf="@id/plot_synopsis_label_tv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -106,9 +107,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="@dimen/details_label_margin_side"
-                android:layout_marginLeft="@dimen/details_label_margin_side"
+                android:layout_marginTop="@dimen/details_ll_margin"
+                android:layout_marginRight="@dimen/details_ll_margin"
+                android:layout_marginLeft="@dimen/details_ll_margin"
                 app:layout_constraintTop_toBottomOf="@id/plot_synopsis_tv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -117,15 +118,14 @@
                     android:id="@+id/trailers_label_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Trailers"
-                    android:textSize="16sp"
-                     />
+                    android:text="@string/details_trailers"
+                    android:textSize="@dimen/details_trailers_label_tv_text_size" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/trailers_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
             </LinearLayout>
 
@@ -133,9 +133,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="@dimen/details_label_margin_side"
-                android:layout_marginLeft="@dimen/details_label_margin_side"
+                android:layout_marginTop="@dimen/details_ll_margin"
+                android:layout_marginRight="@dimen/details_ll_margin"
+                android:layout_marginLeft="@dimen/details_ll_margin"
                 app:layout_constraintTop_toBottomOf="@id/trailers_ll"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -144,8 +144,8 @@
                     android:id="@+id/reviews_label_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Reviews"
-                    android:textSize="16sp" />
+                    android:text="@string/details_reviews"
+                    android:textSize="@dimen/details_reviews_label_tv_text_size" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/reviews_rv"

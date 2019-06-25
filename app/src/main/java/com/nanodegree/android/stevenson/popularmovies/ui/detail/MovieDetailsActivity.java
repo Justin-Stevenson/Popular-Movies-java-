@@ -186,7 +186,7 @@ public class MovieDetailsActivity extends AppCompatActivity
         mMovieBackdropImg.setContentDescription(getString(R.string.movie_backdrop_content_description, movie.getTitle()));
         mMovieTitle.setText(movie.getTitle());
         mReleaseDate.setText(formatReleaseDate(movie.getReleaseDate()));
-        mUserRating.setText(movie.getUserRating());
+        mUserRating.setText(getString(R.string.user_rating_text, movie.getUserRating()));
         mPlotSynopsis.setText(movie.getSynopsis());
         mCollapsingToolbar.setTitle(movie.getTitle());
     }

@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(getString(R.string.pref_sort_order), mCurrentSortOrder.name());
-        editor.commit();
+        editor.apply();
     }
 
     @Override
