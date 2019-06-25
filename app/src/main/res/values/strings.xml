@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Popular Movies</string>
 
+    <!-- Shared preferences keys -->
+    <string name="pref_sort_order">sortorder</string>
+
     <!-- Details action bar display title-->
     <string name="details_activity_display_title">Movie Details</string>
 
@@ -24,16 +27,38 @@
     <string name="default_movie_poster_content_description">Movie poster image</string>
     <string name="movie_poster_content_description">%1$s movie poster</string>
 
+    <!-- Movie backdrop image -->
+    <string name="default_movie_backdrop_content_description">Movie backdrop image</string>
+    <string name="movie_backdrop_content_description">%1$s movie backdrop</string>
+
     <!-- Movies option menu-->
     <string name="action_popular">Popular</string>
     <string name="action_top_rated">Top Rated</string>
+    <string name="action_favorites">Favorites</string>
 
     <!-- Movie Details labels -->
-    <string name="details_release_date">Release Date</string>
-    <string name="details_user_rating">User Rating</string>
     <string name="details_plot_synopsis">Plot Synopsis</string>
+    <string name="details_trailers">Trailers</string>
+    <string name="details_reviews">Reviews</string>
 
-    <!-- Movie Details values -->
+    <!-- Movie Details user rating -->
     <string name="user_rating_text">%1$s / 10</string>
+    <string name="user_rating_iv_content_description">User rating star icon</string>
 
+    <!-- Movie Details option menu -->
+    <string name="action_share">Share</string>
+
+    <!-- Trailer image-->
+    <string name="trailer_iv_content_description">Movie trailer image</string>
+
+    <!-- Trailer play button -->
+    <string name="trailer_play_iv_content_description">Play movie trailer</string>
+
+    <!-- Toast messages -->
+    <string name="toast_no_favorites">No favorites exist. You will need to select some favorites from Top Rated or Popular movies.</string>
+    <string name="toast_no_trailers">No trailers exist for %1$s so the trailer\'s YouTube link cannot be shared.</string>
+    <string name="toast_no_share_app">No apps exist on this device to share the YouTube video url.</string>
+
+    <!-- Share YouTube message-->
+    <string name="share_youtube_message">Here is the link for the %1$s trailer.\n %2$s</string>
 </resources>

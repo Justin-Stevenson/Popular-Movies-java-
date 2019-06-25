@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/review_cv_margin"
+    android:layout_marginBottom="@dimen/review_cv_margin">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/review_cl_margin">
+
+        <TextView
+            android:id="@+id/author_tv"
+            android:layout_width="@dimen/review_author_tv_width"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/review_author_tv_text_size"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/first_names"/>
+
+        <TextView
+            android:id="@+id/content_tv"
+            android:layout_width="@dimen/review_content_tv_width"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/review_content_tv_margin_top"
+            android:textSize="@dimen/review_content_tv_text_size"
+            app:layout_goneMarginBottom="@dimen/review_content_tv_margin_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/author_tv"
+            app:layout_constraintTop_toBottomOf="@+id/author_tv"
+            tools:text="@tools:sample/lorem/random"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

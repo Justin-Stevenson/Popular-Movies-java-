@@ -1,31 +1,47 @@
-package com.nanodegree.android.stevenson.popularmovies.models;
+package com.nanodegree.android.stevenson.popularmovies.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
+@Entity
 public class Movie implements Parcelable {
 
-    private static final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185/";
+    @PrimaryKey
+    @NonNull
+    private String id;
 
-    private final String title;
+    private String title;
 
     @SerializedName("poster_path")
-    private final String poster;
+    private String poster;
+
+    @SerializedName("backdrop_path")
+    private String backdrop;
 
     @SerializedName("overview")
-    private final String synopsis;
+    private String synopsis;
 
     @SerializedName("vote_average")
-    private final String userRating;
+    private String userRating;
 
     @SerializedName("release_date")
-    private final String releaseDate;
+    private String releaseDate;
+
+    public Movie() {}
 
     private Movie(Parcel in) {
+        id = Objects.requireNonNull(in.readString());
         title = in.readString();
         poster = in.readString();
+        backdrop = in.readString();
         synopsis = in.readString();
         userRating = in.readString();
         releaseDate = in.readString();
@@ -43,24 +59,61 @@ public class Movie implements Parcelable {
         }
     };
 
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getPoster() {
-        return POSTER_BASE_URL + poster;
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
+    public String getBackdrop() {
+        return backdrop;
+    }
+
+    public void setBackdrop(String backdrop) {
+        this.backdrop = backdrop;
     }
 
     public String getSynopsis() {
         return synopsis;
     }
 
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
     public String getUserRating() {
         return userRating;
     }
 
+    public void setUserRating(String userRating) {
+        this.userRating = userRating;
+    }
+
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     @Override
@@ -70,8 +123,10 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(title);
         dest.writeString(poster);
+        dest.writeString(backdrop);
         dest.writeString(synopsis);
         dest.writeString(userRating);
         dest.writeString(releaseDate);

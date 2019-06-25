@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/trailer_cv_width"
+    android:layout_height="@dimen/trailer_cv_height"
+    android:layout_margin="@dimen/trailer_cv_margin">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/trailer_iv"
+            android:layout_width="@dimen/trailer_iv_size"
+            android:layout_height="@dimen/trailer_iv_size"
+            android:contentDescription="@string/trailer_iv_content_description"
+            app:layout_constraintDimensionRatio="@dimen/trailer_iv_dimension_ratio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/play_video_button_iv"
+            android:layout_width="@dimen/trailer_play_iv_size"
+            android:layout_height="@dimen/trailer_play_iv_size"
+            android:src="@drawable/ic_play_video"
+            android:contentDescription="@string/trailer_play_iv_content_description"
+            app:elevation="@dimen/trailer_play_iv_elevation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

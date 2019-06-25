@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:targetApi="n"
         tools:ignore="AllowBackup">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.list.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,12 +24,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MovieDetailsActivity"
+            android:name=".ui.detail.MovieDetailsActivity"
             android:label="@string/details_activity_display_title"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".ui.list.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.list.MainActivity" />
         </activity>
     </application>
 

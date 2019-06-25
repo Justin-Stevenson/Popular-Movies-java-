@@ -8,6 +8,16 @@ It is currently under development. Stay tuned for more to come.
 * Settings to switch between popular and top rated movies sort orders
 * Clicking movie poster displays movie details
 
+## Stage 2
+* Display movie trailers in the movie details
+* Open YouTube app or web browser to play trailers
+* Display movie reviews in the movie details
+* Allow users to mark movie as a favorite
+* Add another setting to allow user to sort by favorites
+* Persist favorites to local Room database
+* Improve application efficiency with Android Architecture Components
+* Allow users to share first trailer's YouTube url via movie details
+
 ## How to use
 This application uses data from [The Movie Database API](https://www.themoviedb.org/documentation/api). 
 In order to use it, you must provide your own API key. Once you get the API key, you will need to put
@@ -34,3 +44,9 @@ Inside this folder, there should be a *gradle.properties* file. If not, you shou
 All movie data is provided by **The Movie DB**
 
 <img src="readme-assets/tmdb.png" width=125 height=49>
+
+## Future Improvements
+* Utilize [NetworkBoundResource](https://developer.android.com/jetpack/docs/guide#addendum) to improve fetching/storing of network and local data
+* Store images for local movies in local storage
+* Convert to Kotlin
+* Improve the UI to display current sort order for user

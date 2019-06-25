@@ -1,102 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.list.MainActivity">
 
-    <ProgressBar
-        android:id="@+id/movies_pb"
-        android:layout_width="@dimen/progress_bar_width"
-        android:layout_height="@dimen/progress_bar_height"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/main_horizontal_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="@dimen/main_horizontal_guideline_constraint_percent" />
-
-    <ImageView
-        android:id="@+id/error_iv"
-        android:layout_width="@dimen/error_iv_width"
-        android:layout_height="@dimen/error_iv_height"
-        android:visibility="invisible"
-        android:contentDescription="@string/error_image_content_description"
-        app:layout_constraintDimensionRatio="@dimen/error_iv_dimension_ratio"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/main_horizontal_guideline" />
-
-    <TextView
-        android:id="@+id/error_heading_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_marginStart="@dimen/error_heading_margin"
-        android:layout_marginLeft="@dimen/error_heading_margin"
-        android:layout_marginTop="@dimen/error_heading_margin"
-        android:layout_marginEnd="@dimen/error_heading_margin"
-        android:layout_marginRight="@dimen/error_heading_margin"
-        android:textSize="@dimen/error_heading_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/error_iv" />
-
-    <TextView
-        android:id="@+id/error_message_tv"
-        android:layout_width="@dimen/error_message_tv_width"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_marginStart="@dimen/error_message_tv_side_margin"
-        android:layout_marginLeft="@dimen/error_message_tv_side_margin"
-        android:layout_marginTop="@dimen/error_message_tv_top_margin"
-        android:layout_marginEnd="@dimen/error_message_tv_side_margin"
-        android:layout_marginRight="@dimen/error_message_tv_side_margin"
-        android:gravity="center_horizontal"
-        android:textSize="@dimen/error_message_tv_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/error_heading_tv" />
-
-    <Button
-        android:id="@+id/error_btn"
-        android:layout_width="@dimen/error_btn_width"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_marginStart="@dimen/error_btn_margin"
-        android:layout_marginLeft="@dimen/error_btn_margin"
-        android:layout_marginTop="@dimen/error_btn_margin"
-        android:layout_marginEnd="@dimen/error_btn_margin"
-        android:layout_marginRight="@dimen/error_btn_margin"
-        android:layout_marginBottom="@dimen/error_btn_margin"
-        android:text="@string/no_network_connection_button"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimary"
-        app:layout_constraintWidth_percent="@dimen/error_btn_constraint_width_percent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/error_message_tv" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/movies_rv"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/movies_rv_height"
-        android:scrollbars="vertical"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark"
+            app:layout_scrollFlags="enterAlways|snap"
+            app:title="@string/app_name">
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".ui.list.MainActivity">
+
+        <ProgressBar
+            android:id="@+id/movies_pb"
+            android:layout_width="@dimen/progress_bar_width"
+            android:layout_height="@dimen/progress_bar_height"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/main_horizontal_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="@dimen/main_horizontal_guideline_constraint_percent" />
+
+        <ImageView
+            android:id="@+id/error_iv"
+            android:layout_width="@dimen/error_iv_width"
+            android:layout_height="@dimen/error_iv_height"
+            android:visibility="invisible"
+            android:contentDescription="@string/error_image_content_description"
+            app:layout_constraintDimensionRatio="@dimen/error_iv_dimension_ratio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/main_horizontal_guideline" />
+
+        <TextView
+            android:id="@+id/error_heading_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginStart="@dimen/error_heading_margin"
+            android:layout_marginLeft="@dimen/error_heading_margin"
+            android:layout_marginTop="@dimen/error_heading_margin"
+            android:layout_marginEnd="@dimen/error_heading_margin"
+            android:layout_marginRight="@dimen/error_heading_margin"
+            android:textSize="@dimen/error_heading_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/error_iv" />
+
+        <TextView
+            android:id="@+id/error_message_tv"
+            android:layout_width="@dimen/error_message_tv_width"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginStart="@dimen/error_message_tv_side_margin"
+            android:layout_marginLeft="@dimen/error_message_tv_side_margin"
+            android:layout_marginTop="@dimen/error_message_tv_top_margin"
+            android:layout_marginEnd="@dimen/error_message_tv_side_margin"
+            android:layout_marginRight="@dimen/error_message_tv_side_margin"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/error_message_tv_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/error_heading_tv" />
+
+        <Button
+            android:id="@+id/error_btn"
+            android:layout_width="@dimen/error_btn_width"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginStart="@dimen/error_btn_margin"
+            android:layout_marginLeft="@dimen/error_btn_margin"
+            android:layout_marginTop="@dimen/error_btn_margin"
+            android:layout_marginEnd="@dimen/error_btn_margin"
+            android:layout_marginRight="@dimen/error_btn_margin"
+            android:layout_marginBottom="@dimen/error_btn_margin"
+            android:text="@string/no_network_connection_button"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
+            app:layout_constraintWidth_percent="@dimen/error_btn_constraint_width_percent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/error_message_tv" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movies_rv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/movies_rv_height"
+            android:scrollbars="vertical"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

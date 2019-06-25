@@ -6,21 +6,21 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.nanodegree.android.stevenson.popularmovies.model.Movie;
+import com.nanodegree.android.stevenson.popularmovies.model.Trailer;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class MoviesDeserializer implements JsonDeserializer<List<Movie>> {
+public class TrailersDeserializer implements JsonDeserializer<List<Trailer>> {
 
     private static final String RESULTS_KEY = "results";
 
     @Override
-    public List<Movie> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public List<Trailer> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonElement results = json.getAsJsonObject().get(RESULTS_KEY);
-        Type listType = new TypeToken<List<Movie>>() {}.getType();
+        Type listType = new TypeToken<List<Trailer>>() {}.getType();
 
         return new Gson().fromJson(results, listType);
     }

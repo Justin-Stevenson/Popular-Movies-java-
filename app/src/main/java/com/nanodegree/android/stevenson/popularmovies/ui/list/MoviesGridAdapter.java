@@ -1,4 +1,4 @@
-package com.nanodegree.android.stevenson.popularmovies;
+package com.nanodegree.android.stevenson.popularmovies.ui.list;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nanodegree.android.stevenson.popularmovies.models.Movie;
+import com.nanodegree.android.stevenson.popularmovies.R;
+import com.nanodegree.android.stevenson.popularmovies.common.UrlUtility;
+import com.nanodegree.android.stevenson.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -57,9 +59,10 @@ public class MoviesGridAdapter extends RecyclerView.Adapter<MoviesGridAdapter.Mo
         }
 
         void bind(int positionIndex) {
-            Movie movie = mMovies.get(positionIndex);
+            final Movie movie = mMovies.get(positionIndex);
+
             Picasso.get()
-                    .load(movie.getPoster())
+                    .load(UrlUtility.getPosterUrl(movie))
                     .fit()
                     .placeholder(R.drawable.movie_frame_placeholder)
                     .error(R.drawable.data_retrieval_error)

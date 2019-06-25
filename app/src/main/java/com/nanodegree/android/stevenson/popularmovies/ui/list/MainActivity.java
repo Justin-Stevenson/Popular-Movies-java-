@@ -1,8 +1,11 @@
-package com.nanodegree.android.stevenson.popularmovies;
+package com.nanodegree.android.stevenson.popularmovies.ui.list;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,20 +14,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nanodegree.android.stevenson.popularmovies.R;
 import com.nanodegree.android.stevenson.popularmovies.common.Error;
-import com.nanodegree.android.stevenson.popularmovies.common.SortOrderType;
-import com.nanodegree.android.stevenson.popularmovies.common.SortOrderType.SortOrder;
+import com.nanodegree.android.stevenson.popularmovies.common.SortOrder;
 import com.nanodegree.android.stevenson.popularmovies.data.MoviesRepository;
 import com.nanodegree.android.stevenson.popularmovies.data.network.helpers.NetworkConnectionException;
-import com.nanodegree.android.stevenson.popularmovies.models.Movie;
+import com.nanodegree.android.stevenson.popularmovies.model.Movie;
+import com.nanodegree.android.stevenson.popularmovies.ui.detail.MovieDetailsActivity;
+import com.nanodegree.android.stevenson.popularmovies.viewmodel.MainViewModel;
+import com.nanodegree.android.stevenson.popularmovies.viewmodel.MainViewModelFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,9 +46,10 @@ public class MainActivity extends AppCompatActivity
         implements MoviesGridAdapter.MovieClickListener {
 
     private static final String TAG = "MainActivity";
-    private static final String BUNDLE_MOVIES_KEY = "BUNDLE_MOVIES_KEY";
     private static final String BUNDLE_CURRENT_SORT_ORDER_KEY = "BUNDLE_CURRENT_SORT_ORDER_KEY";
+    private static final String BUNDLE_RECYCLER_STATE = "BUNDLE_RECYCLER_STATE";
 
+    @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.movies_pb) ProgressBar mProgressBar;
     @BindView(R.id.error_iv) ImageView mErrorImg;
     @BindView(R.id.error_heading_tv) TextView mErrorHeading;
@@ -48,9 +57,12 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.error_btn) Button mErrorButton;
     @BindView(R.id.movies_rv) RecyclerView mMoviesGrid;
 
-    private @SortOrder int mCurrentSortOrder;
+    private SortOrder mCurrentSortOrder;
     private List<Movie> mMovies;
     private MoviesRepository mMoviesRepository;
+    private MainViewModel mViewModel;
+    private Parcelable mRecyclerState;
+    private GridLayoutManager mGridLayoutManager;
 
     public static Intent getStartIntent(Context context, Movie clickedMovie) {
         Intent intent = new Intent(context, MovieDetailsActivity.class);
@@ -65,27 +77,55 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
-        mMoviesGrid.setLayoutManager(gridLayoutManager);
+        setSupportActionBar(mToolbar);
 
-        mMoviesRepository = new MoviesRepository();
+        setupMoviesRecyclerView();
 
-        if (hasMoviesSaved(savedInstanceState)) {
-            mCurrentSortOrder = getCurrentSortOrderFromSavedInstanceState(savedInstanceState);
-            mMovies = savedInstanceState.getParcelableArrayList(BUNDLE_MOVIES_KEY);
-            loadMovies(mMovies);
+        mMoviesRepository = MoviesRepository.getInstance(getApplication());
+
+        setupViewModel();
+
+        if (savedInstanceState != null) {
+            mCurrentSortOrder =
+                    (SortOrder) savedInstanceState.getSerializable(BUNDLE_CURRENT_SORT_ORDER_KEY);
+            mRecyclerState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_STATE);
+
         } else {
-            mCurrentSortOrder = SortOrderType.POPULAR;
+            mCurrentSortOrder = restoreSortOrderFromSharedPreferences();
+        }
+
+        if (SortOrder.FAVORITES == mCurrentSortOrder) {
+            setupFavoritesObserver();
+        } else {
             loadMovies();
         }
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mRecyclerState != null) {
+            mGridLayoutManager.onRestoreInstanceState(mRecyclerState);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.pref_sort_order), mCurrentSortOrder.name());
+        editor.apply();
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        ArrayList<Movie> movies = new ArrayList<>(mMovies);
-        outState.putParcelableArrayList(BUNDLE_MOVIES_KEY,movies);
-        outState.putInt(BUNDLE_CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
+        outState.putSerializable(BUNDLE_CURRENT_SORT_ORDER_KEY, mCurrentSortOrder);
+        outState.putParcelable(BUNDLE_RECYCLER_STATE,
+                mMoviesGrid.getLayoutManager().onSaveInstanceState());
     }
 
     @Override
@@ -101,18 +141,26 @@ public class MainActivity extends AppCompatActivity
 
         switch (selectedItemId) {
             case R.id.action_popular:
-                if (SortOrderType.POPULAR != mCurrentSortOrder) {
-                    mCurrentSortOrder = SortOrderType.POPULAR;
+                if (SortOrder.POPULAR != mCurrentSortOrder) {
+                    mCurrentSortOrder = SortOrder.POPULAR;
                     loadMovies();
+                    removeFavoritesObserver();
                 }
                 return true;
 
             case R.id.action_top_rated:
-                if (SortOrderType.TOP_RATED != mCurrentSortOrder) {
-                    mCurrentSortOrder = SortOrderType.TOP_RATED;
+                if (SortOrder.TOP_RATED != mCurrentSortOrder) {
+                    mCurrentSortOrder = SortOrder.TOP_RATED;
                     loadMovies();
+                    removeFavoritesObserver();
                 }
                 return true;
+
+            case R.id.action_favorites:
+                if (SortOrder.FAVORITES != mCurrentSortOrder) {
+                    mCurrentSortOrder = SortOrder.FAVORITES;
+                    setupFavoritesObserver();
+                }
         }
 
         return super.onOptionsItemSelected(item);
@@ -132,9 +180,9 @@ public class MainActivity extends AppCompatActivity
         mMoviesRepository.getMovies(mCurrentSortOrder, getMoviesCallback());
     }
 
-
     private void loadMovies(List<Movie> movies) {
-        MoviesGridAdapter moviesGridAdapter = new MoviesGridAdapter(movies, MainActivity.this);
+        mMovies = movies;
+        MoviesGridAdapter moviesGridAdapter = new MoviesGridAdapter(mMovies, MainActivity.this);
         mMoviesGrid.setAdapter(moviesGridAdapter);
         showMovies();
     }
@@ -144,8 +192,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResponse(@NonNull Call<List<Movie>> call, @NonNull Response<List<Movie>> response) {
                 if (response.isSuccessful()) {
-                    mMovies = response.body();
-                    loadMovies(mMovies);
+                    Log.i(TAG, "onResponse: retrieved movies successfully for " + mCurrentSortOrder);
+                    loadMovies(response.body());
                 } else {
                     Log.e(TAG, "onResponse: " + response.code() + " " + response.message());
                     showError(Error.DATA_RETRIEVAL);
@@ -163,6 +211,24 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
+    }
+
+    private void setupMoviesRecyclerView() {
+        mGridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+        mMoviesGrid.setLayoutManager(mGridLayoutManager);
+        mMoviesGrid.setHasFixedSize(true);
+    }
+
+    private void setupViewModel() {
+        MainViewModelFactory factory = new MainViewModelFactory(mMoviesRepository);
+        mViewModel = ViewModelProviders.of(this, factory).get(MainViewModel.class);
+    }
+
+    private SortOrder restoreSortOrderFromSharedPreferences() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String sortOrder = sharedPref.getString(getString(R.string.pref_sort_order), SortOrder.POPULAR.name());
+
+        return SortOrder.valueOf(sortOrder);
     }
 
     private void showProgressBar() {
@@ -203,12 +269,25 @@ public class MainActivity extends AppCompatActivity
         mErrorMessage.setText(errorType.getMessage());
     }
 
-    private boolean hasMoviesSaved(Bundle savedInstanceState) {
-        return savedInstanceState != null && savedInstanceState.getParcelableArrayList(BUNDLE_MOVIES_KEY) != null;
+    private void setupFavoritesObserver() {
+        mViewModel.getFavoriteMovies().observe(this, movies -> {
+            if (mMovies != null && mMovies.isEmpty()) {
+                mMovies.clear();
+            }
+
+            loadMovies(movies);
+
+            if (movies == null || movies.isEmpty()) {
+                Toast.makeText(
+                        MainActivity.this,
+                        R.string.toast_no_favorites,
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
     }
 
-    private @SortOrder int getCurrentSortOrderFromSavedInstanceState(Bundle savedInstanceState) {
-        int sortOrderValue = savedInstanceState.getInt(BUNDLE_CURRENT_SORT_ORDER_KEY);
-        return SortOrderType.convert(sortOrderValue);
+    private void removeFavoritesObserver() {
+        mViewModel.getFavoriteMovies().removeObservers(this);
     }
 }
