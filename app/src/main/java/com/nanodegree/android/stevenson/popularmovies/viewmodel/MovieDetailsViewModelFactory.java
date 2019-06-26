@@ -1,18 +1,18 @@
 package com.nanodegree.android.stevenson.popularmovies.viewmodel;
 
+import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.nanodegree.android.stevenson.popularmovies.data.MoviesRepository;
-
 public class MovieDetailsViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
-    private final MoviesRepository mRepository;
+    private final Application mApplication;
     private final String mMovieId;
 
-    public MovieDetailsViewModelFactory(MoviesRepository repository, String movieId) {
-        this.mRepository = repository;
+    public MovieDetailsViewModelFactory(Application application, String movieId) {
+        this.mApplication = application;
         this.mMovieId = movieId;
     }
 
@@ -20,6 +20,6 @@ public class MovieDetailsViewModelFactory extends ViewModelProvider.NewInstanceF
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new MovieDetailsViewModel(mRepository, mMovieId);
+        return (T) new MovieDetailsViewModel(mApplication, mMovieId);
     }
 }
