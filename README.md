@@ -54,3 +54,5 @@ All movie data is provided by **The Movie DB**
 * Improve the UI to display current sort order for user
 * Use fragments with single activity
 * Utilize Navigation architecture component
+* Add dependency injection
+* Add tests
