@@ -20,6 +20,11 @@
     <string name="data_retrieval_header">No movie data…</string>
     <string name="data_retrieval_message">Oops… There was an error retrieving the movie data.</string>
 
+    <!-- No favorites error -->
+    <string name="no_favorites_img_description">No favorites exist</string>
+    <string name="no_favorites_header">No favorite movies…</string>
+    <string name="no_favorites_message">Oops… No favorites exist. You will need to select some favorite movies from Top Rated or Popular movies.</string>
+
     <!-- Error button -->
     <string name="no_network_connection_button">Retry</string>
 
@@ -45,6 +50,14 @@
     <string name="user_rating_text">%1$s / 10</string>
     <string name="user_rating_iv_content_description">User rating star icon</string>
 
+    <!-- Movie Details trailers -->
+    <string name="trailers_error_message">Trailers are unavailable</string>
+    <string name="trailers_empty_message">No trailers exist for this movie yet</string>
+
+    <!-- Movie Details reviews -->
+    <string name="reviews_error_message">Reviews are unavailable</string>
+    <string name="reviews_empty_message">No reviews exist for this movie yet</string>
+
     <!-- Movie Details option menu -->
     <string name="action_share">Share</string>
 
@@ -55,7 +68,6 @@
     <string name="trailer_play_iv_content_description">Play movie trailer</string>
 
     <!-- Toast messages -->
-    <string name="toast_no_favorites">No favorites exist. You will need to select some favorites from Top Rated or Popular movies.</string>
     <string name="toast_no_trailers">No trailers exist for %1$s so the trailer\'s YouTube link cannot be shared.</string>
     <string name="toast_no_share_app">No apps exist on this device to share the YouTube video url.</string>
 

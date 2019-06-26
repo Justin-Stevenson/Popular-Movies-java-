@@ -16,6 +16,12 @@ public class Error {
             R.string.data_retrieval_header,
             R.string.data_retrieval_message);
 
+    public final static Error NO_FAVORITES = new Error(
+            R.drawable.ic_favorite_border,
+            R.string.no_favorites_img_description,
+            R.string.no_favorites_header,
+            R.string.no_favorites_message);
+
     private final int image;
     private final int imageDescription;
     private final int header;

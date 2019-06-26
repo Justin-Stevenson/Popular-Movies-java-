@@ -74,6 +74,18 @@
     <!-- Movie Details backdrop -->
     <item name="details_backdrop_iv_parallax_multiplier_percent" format="float" type="dimen">0.7</item>
 
+    <!-- Movie Details trailers -->
+    <dimen name="details_trailers_pb_size">50dp</dimen>
+    <dimen name="details_trailers_pb_margin">8dp</dimen>
+    <dimen name="details_trailers_message_tv_margin">8dp</dimen>
+    <dimen name="details_trailers_message_tv_text_size">14sp</dimen>
+
+    <!-- Movie Details reviews -->
+    <dimen name="details_reviews_pb_size">50dp</dimen>
+    <dimen name="details_reviews_pb_margin">8dp</dimen>
+    <dimen name="details_reviews_message_tv_margin">8dp</dimen>
+    <dimen name="details_reviews_message_tv_text_size">14sp</dimen>
+
     <!-- Movie Details favorite -->
     <dimen name="details_favorite_fab_margin">16dp</dimen>
 

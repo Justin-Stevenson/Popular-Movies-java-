@@ -16,8 +16,7 @@ import com.nanodegree.android.stevenson.popularmovies.model.Trailer;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
+import io.reactivex.Single;
 
 public class MoviesRepository {
 
@@ -46,52 +45,43 @@ public class MoviesRepository {
         return sInstance;
     }
 
-    public void getMovies(SortOrder sortOrder, Callback<List<Movie>> callback) {
-        final Call<List<Movie>> request;
-
+    public Single<List<Movie>> getMovies(SortOrder sortOrder) {
         if (SortOrder.POPULAR == sortOrder) {
-            request = mMoviesService.getPopularMovies();
-        } else {
-            request = mMoviesService.getTopRatedMovies();
+            Log.d(TAG, "getMovies: retrieving popular movies from network");
+            return mMoviesService.getPopularMovies();
         }
 
-
-        request.enqueue(callback);
+        Log.d(TAG, "getMovies: retrieving top rated movies from network");
+        return mMoviesService.getTopRatedMovies();
     }
 
-    public void getMovieTrailers(String key, Callback<List<Trailer>> callback) {
-        final Call<List<Trailer>> request;
-
-        request = mMoviesService.getMovieTrailers(key);
-
-        request.enqueue(callback);
+    public Single<List<Trailer>> getMovieTrailers(String key) {
+        Log.d(TAG, "getMovieTrailers: retrieving movie trailers from network");
+        return mMoviesService.getMovieTrailers(key);
     }
 
-    public void getMovieReviews(String key, Callback<List<Review>> callback) {
-        final Call<List<Review>> request;
-
-        request = mMoviesService.getMovieReviews(key);
-
-        request.enqueue(callback);
+    public Single<List<Review>> getMovieReviews(String key) {
+        Log.d(TAG, "getMovieReviews: retrieving movie reviews from network");
+        return mMoviesService.getMovieReviews(key);
     }
 
     public LiveData<List<Movie>> getFavoriteMovies() {
-        Log.i(TAG, "getFavoriteMovies: retrieving movies from db");
+        Log.d(TAG, "getFavoriteMovies: retrieving movies from db");
         return mMoviesDao.getMovies();
     }
 
     public LiveData<Movie> getFavoriteMovieById(String id) {
-        Log.i(TAG, "getFavoriteMovieById: retrieving favorite movie");
+        Log.d(TAG, "getFavoriteMovieById: retrieving favorite movie");
         return mMoviesDao.getMovieById(id);
     }
 
     public void removeFavoriteMovie(Movie movie) {
-        Log.i(TAG, "removeFavoriteMovie: removing movie from favorites");
+        Log.d(TAG, "removeFavoriteMovie: removing movie from favorites");
         mMoviesDao.deleteMovie(movie);
     }
 
     public void addFavoriteMovie(Movie movie) {
-        Log.i(TAG, "addFavoriteMovie: add movie to favorites");
+        Log.d(TAG, "addFavoriteMovie: add movie to favorites");
         mMoviesDao.insertMovie(movie);
     }
 }

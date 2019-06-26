@@ -127,6 +127,22 @@
                     android:layout_height="wrap_content"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+                <ProgressBar
+                    android:id="@+id/trailers_loading_pb"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="@dimen/details_trailers_pb_size"
+                    android:layout_height="@dimen/details_trailers_pb_size"
+                    android:layout_margin="@dimen/details_trailers_pb_margin"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:id="@+id/trailers_message_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/details_trailers_message_tv_margin"
+                    android:textSize="@dimen/details_trailers_message_tv_text_size"
+                    tools:text="@sample/message" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -153,7 +169,25 @@
                     android:layout_height="wrap_content"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+                <ProgressBar
+                    android:id="@+id/reviews_loading_pb"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="@dimen/details_reviews_pb_size"
+                    android:layout_height="@dimen/details_reviews_pb_size"
+                    android:layout_margin="@dimen/details_reviews_pb_margin"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:id="@+id/reviews_message_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/details_reviews_message_tv_margin"
+                    android:textSize="@dimen/details_reviews_message_tv_text_size"
+                    tools:text="@sample/message"/>
+
             </LinearLayout>
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

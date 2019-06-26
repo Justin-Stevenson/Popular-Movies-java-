@@ -38,6 +38,8 @@ Inside this folder, there should be a *gradle.properties* file. If not, you shou
 * [okhttp](https://square.github.io/okhttp/)
 * [Picasso](https://square.github.io/picasso/)
 * [Retrofit](https://square.github.io/retrofit/)
+* [RxAndroid](https://github.com/ReactiveX/RxAndroid)
+* [RxJava2](https://github.com/ReactiveX/RxJava)
 * [The Movie DB](https://www.themoviedb.org/?language=en-US)
 
 ## Attribution
@@ -50,3 +52,5 @@ All movie data is provided by **The Movie DB**
 * Store images for local movies in local storage
 * Convert to Kotlin
 * Improve the UI to display current sort order for user
+* Use fragments with single activity
+* Utilize Navigation architecture component
