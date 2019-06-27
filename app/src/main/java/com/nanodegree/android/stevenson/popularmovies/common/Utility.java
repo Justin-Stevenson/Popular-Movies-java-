@@ -7,11 +7,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Utility {
+public final class Utility {
 
     private static final String TAG = "Utility";
     private static final String INPUT_RELEASE_DATE_FORMAT = "yyyy-MM-dd";
     private static final String OUTPUT_RELEASE_DATE_FORMAT = "MMMM d, yyyy";
+
+    private Utility() {
+        throw new AssertionError("Utility class cannot be instantiated");
+    }
 
     public static String formatReleaseDate(String releaseDate) {
         try {
